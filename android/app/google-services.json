@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "59442954474",
+    "project_id": "sosmed-e13d1",
+    "storage_bucket": "sosmed-e13d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59442954474:android:5f4b5a5cdeb90570e29793",
+        "android_client_info": {
+          "package_name": "bagus2x.sosmed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "59442954474-iqhq2hedhjumi8m4biq0jocmqtofe621.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoiXsx5jEx1iwdSmJIFru3XMylaRkVVlM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "59442954474-iqhq2hedhjumi8m4biq0jocmqtofe621.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

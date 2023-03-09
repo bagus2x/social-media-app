@@ -1,0 +1,10 @@
+###
+GET http://localhost:8080/users
+
+###
+GET http://localhost:8080/user/2
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjc1MDM5NTk1LCJ1c2VybmFtZSI6ImJ1ZGlAZ21haWwuY29tIn0.Q43ZqUQOPuIlG6qymBS0UE-GkCUYzBZqsG32ENhUHWA
+
+###
+GET http://localhost:8080/user
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiZXhwIjoxNjc1MDQwMDY0LCJ1c2VybmFtZSI6Im1ha2htdWRAZ21haWwuY29tIn0.cHXxlZ2RHNuE0nY141XXQOEBnI0nSbGPGfBBeavzuLQ

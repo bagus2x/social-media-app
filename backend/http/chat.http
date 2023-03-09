@@ -1,0 +1,17 @@
+POST http://localhost:8080/chat
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzA5MDE1MTg5LCJQcm9maWxlIjp7ImlkIjoxLCJuYW1lIjoiam9oYW4iLCJ1c2VybmFtZSI6ImpvaGFuIiwicGhvdG8iOm51bGx9fQ.RN-WUQPry2smFc56fJjM4RlyGfEqo3skDTG0dyDdFrM
+
+{
+  "members": [
+    4
+  ],
+  "name": "",
+  "photo": null,
+  "type": "private"
+}
+
+###
+
+GET http://localhost:8080/chats
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzA5MDE1MTg5LCJQcm9maWxlIjp7ImlkIjoxLCJuYW1lIjoiam9oYW4iLCJ1c2VybmFtZSI6ImpvaGFuIiwicGhvdG8iOm51bGx9fQ.RN-WUQPry2smFc56fJjM4RlyGfEqo3skDTG0dyDdFrM

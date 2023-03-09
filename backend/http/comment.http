@@ -1,0 +1,23 @@
+GET http://localhost:8080/feed/6/comments?next_id=9999999999&parent_id=5&limit=100
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzA5MjIyMzQ1LCJQcm9maWxlIjp7ImlkIjoxLCJuYW1lIjoiam9oYW4iLCJ1c2VybmFtZSI6ImpvaGFuIiwicGhvdG8iOm51bGx9fQ.21Cv8CV8cBZ1GiF9muuiohgm8qSkNs0qI8wsLmI2G7k
+
+####
+
+GET http://localhost:8080/comment/5
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjc1OTM0NjEwLCJ1c2VybmFtZSI6ImJhZ3VzQGdtYWlsLmNvbSJ9.DPoDb2mA5brcQLfT5UuWOIq-qLBHB_8OvdkAG9EoWYY
+
+####
+
+POST http://localhost:8080/comment
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjc1NTUzMjQ3LCJ1c2VybmFtZSI6ImJhZ3VzQGdtYWlsLmNvbSJ9.aIb6THB5jhlqwNYbcneQfqm91FPk1ZIo9k7snn4irvM
+
+{
+  "description":  "i'm confused",
+  "feedId":  30,
+  "parentId":  5,
+  "authorId":  1,
+  "medias": [
+
+  ]
+}

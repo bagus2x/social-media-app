@@ -1,0 +1,7 @@
+sky
+blue
+rock
+water
+array
+karma
+falcon

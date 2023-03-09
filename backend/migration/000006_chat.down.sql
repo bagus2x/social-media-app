@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS chat;
+DROP TYPE IF EXISTS chat_type;

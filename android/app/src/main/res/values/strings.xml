@@ -1,0 +1,76 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Sosmed</string>
+    <string name="cd_home">Home</string>
+    <string name="text_new_post">New Post</string>
+    <string name="text_pst">Post</string>
+    <string name="text_public">Public</string>
+    <string name="text_gallery">Gallery</string>
+    <string name="text_edit_photo">Edit Photo</string>
+    <string name="text_sticker">Sticker</string>
+    <string name="text_normal">Normal</string>
+    <string name="text_black">Black</string>
+    <string name="icon_logo">
+        M143.228 59.57c-1.226-0.4-2.55-0.463-3.814-0.186-1.264 0.281-2.42 0.894-3.326 1.77l-7.098 6.689c-7.48-4.448-16.145-6.807-24.99-6.807-8.845 0-17.51 2.359-24.99 6.807l-7.098-6.689c-0.907-0.875-2.062-1.488-3.326-1.77-1.264-0.277-2.587-0.214-3.814 0.186-1.302 0.435-2.432 1.239-3.226 2.303-0.798 1.06-1.226 2.331-1.226 3.633v33.522c0 19.432 16.842 35.46 38.472 37.717 0.235 0.024 0.47 0 0.693-0.071 0.227-0.071 0.433-0.182 0.605-0.332 0.176-0.146 0.315-0.332 0.407-0.534 0.097-0.202 0.143-0.423 0.143-0.645v-12.665l-5.628-5.303c-0.634-0.59-1.004-1.385-1.037-2.224-0.03-0.839 0.281-1.658 0.87-2.288 0.31-0.305 0.68-0.55 1.092-0.72 0.412-0.17 0.857-0.257 1.306-0.265 0.45-0.008 0.895 0.067 1.31 0.226 0.42 0.154 0.798 0.388 1.121 0.68L104 116.72l4.326-4.116c0.323-0.293 0.701-0.526 1.121-0.68 0.416-0.158 0.861-0.234 1.31-0.226 0.45 0.008 0.895 0.095 1.302 0.265 0.416 0.17 0.785 0.416 1.096 0.72 0.588 0.63 0.899 1.449 0.87 2.288-0.034 0.839-0.403 1.635-1.037 2.224l-5.628 5.303v12.665c0 0.222 0.046 0.443 0.143 0.645 0.092 0.202 0.231 0.388 0.407 0.534 0.172 0.15 0.378 0.261 0.605 0.332 0.223 0.071 0.458 0.095 0.693 0.071 21.63-2.256 38.472-18.285 38.472-37.717V65.506c0-1.302-0.428-2.573-1.222-3.633-0.798-1.065-1.928-1.868-3.23-2.303zM85.52 105.36c-0.995 0-1.97-0.277-2.801-0.8-0.827-0.522-1.474-1.263-1.856-2.133-0.378-0.867-0.479-1.82-0.286-2.743 0.193-0.922 0.676-1.765 1.378-2.43 0.706-0.665 1.604-1.116 2.583-1.302 0.979-0.182 1.99-0.087 2.91 0.273 0.92 0.356 1.71 0.966 2.264 1.75 0.554 0.78 0.848 1.698 0.848 2.636 0 1.263-0.53 2.47-1.474 3.36-0.95 0.89-2.23 1.39-3.566 1.39zm8.4-25.33c0 0.839-0.353 1.646-0.983 2.24-0.63 0.594-1.487 0.926-2.377 0.926-0.89 0-1.747-0.332-2.377-0.926-0.63-0.594-0.983-1.401-0.983-2.24v-7.52c0-0.839 0.353-1.642 0.983-2.236 0.63-0.598 1.487-0.93 2.377-0.93 0.89 0 1.747 0.332 2.377 0.93 0.63 0.594 0.983 1.397 0.983 2.236v7.52zm13.44 0c0 0.839-0.353 1.646-0.983 2.24-0.63 0.594-1.487 0.926-2.377 0.926-0.89 0-1.747-0.332-2.377-0.926-0.63-0.594-0.983-1.401-0.983-2.24v-9.498c0-0.839 0.353-1.642 0.983-2.236 0.63-0.598 1.487-0.93 2.377-0.93 0.89 0 1.747 0.332 2.377 0.93 0.63 0.594 0.983 1.397 0.983 2.236v9.498zm6.72 0v-7.52c0-0.839 0.353-1.642 0.983-2.236 0.63-0.598 1.487-0.93 2.377-0.93 0.89 0 1.747 0.332 2.377 0.93 0.63 0.594 0.983 1.397 0.983 2.236v7.52c0 0.839-0.353 1.646-0.983 2.24-0.63 0.594-1.487 0.926-2.377 0.926-0.89 0-1.747-0.332-2.377-0.926-0.63-0.594-0.983-1.401-0.983-2.24zm8.4 25.33c-0.995 0-1.97-0.277-2.801-0.8-0.827-0.522-1.474-1.263-1.856-2.133-0.378-0.867-0.479-1.82-0.286-2.743 0.193-0.922 0.676-1.765 1.378-2.43 0.706-0.665 1.604-1.116 2.583-1.302 0.979-0.182 1.99-0.087 2.91 0.273 0.924 0.356 1.71 0.966 2.264 1.75 0.554 0.78 0.848 1.698 0.848 2.636 0 1.263-0.53 2.47-1.474 3.36-0.945 0.89-2.23 1.39-3.566 1.39z
+    </string>
+    <string-array name="com_google_android_gms_fonts_certs_dev">
+        <item tools:ignore="Typos">
+            MIIEqDCCA5CgAwIBAgIJANWFuGx90071MA0GCSqGSIb3DQEBBAUAMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEQMA4GA1UEChMHQW5kcm9pZDEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDEiMCAGCSqGSIb3DQEJARYTYW5kcm9pZEBhbmRyb2lkLmNvbTAeFw0wODA0MTUyMzM2NTZaFw0zNTA5MDEyMzM2NTZaMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEQMA4GA1UEChMHQW5kcm9pZDEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDEiMCAGCSqGSIb3DQEJARYTYW5kcm9pZEBhbmRyb2lkLmNvbTCCASAwDQYJKoZIhvcNAQEBBQADggENADCCAQgCggEBANbOLggKv+IxTdGNs8/TGFy0PTP6DHThvbbR24kT9ixcOd9W+EaBPWW+wPPKQmsHxajtWjmQwWfna8mZuSeJS48LIgAZlKkpFeVyxW0qMBujb8X8ETrWy550NaFtI6t9+u7hZeTfHwqNvacKhp1RbE6dBRGWynwMVX8XW8N1+UjFaq6GCJukT4qmpN2afb8sCjUigq0GuMwYXrFVee74bQgLHWGJwPmvmLHC69EH6kWr22ijx4OKXlSIx2xT1AsSHee70w5iDBiK4aph27yH3TxkXy9V89TDdexAcKk/cVHYNnDBapcavl7y0RiQ4biu8ymM8Ga/nmzhRKya6G0cGw8CAQOjgfwwgfkwHQYDVR0OBBYEFI0cxb6VTEM8YYY6FbBMvAPyT+CyMIHJBgNVHSMEgcEwgb6AFI0cxb6VTEM8YYY6FbBMvAPyT+CyoYGapIGXMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEQMA4GA1UEChMHQW5kcm9pZDEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDEiMCAGCSqGSIb3DQEJARYTYW5kcm9pZEBhbmRyb2lkLmNvbYIJANWFuGx90071MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEEBQADggEBABnTDPEF+3iSP0wNfdIjIz1AlnrPzgAIHVvXxunW7SBrDhEglQZBbKJEk5kT0mtKoOD1JMrSu1xuTKEBahWRbqHsXclaXjoBADb0kkjVEJu/Lh5hgYZnOjvlba8Ld7HCKePCVePoTJBdI4fvugnL8TsgK05aIskyY0hKI9L8KfqfGTl1lzOv2KoWD0KWwtAWPoGChZxmQ+nBli+gwYMzM1vAkP+aayLe0a1EQimlOalO762r0GXO0ks+UeXde2Z4e+8S/pf7pITEI/tP+MxJTALw9QUWEv9lKTk+jkbqxbsh8nfBUapfKqYn0eidpwq2AzVp3juYl7//fKnaPhJD9gs=
+        </item>
+    </string-array>
+    <string-array name="com_google_android_gms_fonts_certs_prod">
+        <item>
+            MIIEQzCCAyugAwIBAgIJAMLgh0ZkSjCNMA0GCSqGSIb3DQEBBAUAMHQxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtHb29nbGUgSW5jLjEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDAeFw0wODA4MjEyMzEzMzRaFw0zNjAxMDcyMzEzMzRaMHQxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtHb29nbGUgSW5jLjEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDCCASAwDQYJKoZIhvcNAQEBBQADggENADCCAQgCggEBAKtWLgDYO6IIrgqWbxJOKdoR8qtW0I9Y4sypEwPpt1TTcvZApxsdyxMJZ2JORland2qSGT2y5b+3JKkedxiLDmpHpDsz2WCbdxgxRczfey5YZnTJ4VZbH0xqWVW/8lGmPav5xVwnIiJS6HXk+BVKZF+JcWjAsb/GEuq/eFdpuzSqeYTcfi6idkyugwfYwXFU1+5fZKUaRKYCwkkFQVfcAs1fXA5V+++FGfvjJ/CxURaSxaBvGdGDhfXE28LWuT9ozCl5xw4Yq5OGazvV24mZVSoOO0yZ31j7kYvtwYK6NeADwbSxDdJEqO4k//0zOHKrUiGYXtqw/A0LFFtqoZKFjnkCAQOjgdkwgdYwHQYDVR0OBBYEFMd9jMIhF1Ylmn/Tgt9r45jk14alMIGmBgNVHSMEgZ4wgZuAFMd9jMIhF1Ylmn/Tgt9r45jk14aloXikdjB0MQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLR29vZ2xlIEluYy4xEDAOBgNVBAsTB0FuZHJvaWQxEDAOBgNVBAMTB0FuZHJvaWSCCQDC4IdGZEowjTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBAUAA4IBAQBt0lLO74UwLDYKqs6Tm8/yzKkEu116FmH4rkaymUIE0P9KaMftGlMexFlaYjzmB2OxZyl6euNXEsQH8gjwyxCUKRJNexBiGcCEyj6z+a1fuHHvkiaai+KL8W1EyNmgjmyy8AW7P+LLlkR+ho5zEHatRbM/YAnqGcFh5iZBqpknHf1SKMXFh4dd239FJ1jWYfbMDMy3NS5CTMQ2XFI1MvcyUTdZPErjQfTbQe3aDQsQcafEQPD+nqActifKZ0Np0IS9L9kR/wbNvyz6ENwPiTrjV2KRkEjH78ZMcUQXg0L3BYHJ3lc69Vs5Ddf9uUGGMYldX3WfMBEmh/9iFBDAaTCK
+        </item>
+    </string-array>
+    <string name="text_show_less">show less"</string>
+    <string name="text_show_more">show more</string>
+    <string name="text_show_all_comments">Show all comments"</string>
+    <string name="text_pinned">Pinned</string>
+    <string name="text_camera_rationale">The camera is important for this app. Please grant the permission.</string>
+    <string name="text_gallery_rationale">The gallery is important for this app. Please grant the permission.</string>
+    <string name="text_camera_require_permission">Camera permission required for this feature to be available. Please grant the permission</string>
+    <string name="text_gallery_require_permission">File access permission required for this feature to be available. Please grant the permission</string>
+    <string name="text_take_picture_and_video">Take picture and video</string>
+    <string name="text_next">Next</string>
+    <string name="text_browse_gallery">Browse gallery</string>
+    <string name="text_skip">Skip</string>
+    <string name="text_sign_in">Sign In</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_send">Send</string>
+    <string name="text_translate">Translate</string>
+    <string name="text_report">Report</string>
+    <string name="text_feed">Feed</string>
+    <string name="text_comments">Comments</string>
+    <string name="text_username">Username</string>
+    <string name="text_edit">Edit</string>
+    <string name="text_unfollow">Unfollow</string>
+    <string name="text_follow">Follow</string>
+    <string name="text_me">me</string>
+    <string name="text_create">Create</string>
+    <string name="text_2_members">and</string>
+    <string name="text_network_unavailable">Network Unavailable</string>
+    <string name="text_network_available">Network Available</string>
+    <string name="channel_new_message">New Message</string>
+    <string name="channel_description_new_message">Receive new message from another user</string>
+    <string name="text_loading_dot">Loading…</string>
+    <string name="text_see_translation">See translation</string>
+    <string name="text_see_original_source">See original</string>
+    <string name="text_joined_at">Joined %1$s</string>
+    <string name="text_following">Following</string>
+    <string name="text_followers">Followers</string>
+    <string name="text_feeds">Feeds</string>
+    <string name="text_media">Media</string>
+    <string name="text_favorites">Favorites</string>
+    <string name="text_users">Users</string>
+    <string-array name="text_profile_tab_items">
+        <item>@string/text_feeds</item>
+        <item>@string/text_comments</item>
+        <item>@string/text_media</item>
+        <item>@string/text_favorites</item>
+    </string-array>
+    <string-array name="text_search_tab_items">
+        <item>@string/text_users</item>
+        <item>@string/text_feeds</item>
+    </string-array>
+</resources>

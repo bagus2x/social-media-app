@@ -1,0 +1,21 @@
+POST http://localhost:8080/feed
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzA4MTk3NzAyLCJQcm9maWxlIjp7ImlkIjoxLCJuYW1lIjoiam9oYW4iLCJ1c2VybmFtZSI6ImpvaGFuIiwicGhvdG8iOiIifX0.XQYq28fO1tND3Y3cByjrvahc_QvUEO7ay9nfydjN69A
+
+{
+  "authorId": 1,
+  "medias": [
+
+  ],
+  "description": "Happy new year 2023"
+}
+
+####
+GET http://localhost:8080/feeds
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzA4MjQyMDA4LCJQcm9maWxlIjp7ImlkIjoxLCJuYW1lIjoiam9oYW4iLCJ1c2VybmFtZSI6ImpvaGFuIiwicGhvdG8iOiIifX0.EwhLKmnNyZqeTdKigpWaTcAYcyP-85JPkNd_44u55pE
+####
+
+GET http://localhost:8080/feed/25
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjc1MjE0MDE2LCJ1c2VybmFtZSI6ImJhZ3VzQGdtYWlsLmNvbSJ9.oBBFArqJLOBGI_ssn6QlKke_Ym5aao0rSHgKVN7oEvc
+
+####
