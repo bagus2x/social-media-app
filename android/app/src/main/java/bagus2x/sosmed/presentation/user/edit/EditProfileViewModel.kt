@@ -75,6 +75,7 @@ class EditProfileViewModel @Inject constructor(
                         state.copy(
                             name = user.name,
                             defaultPhoto = user.photo,
+                            defaultHeader = user.header,
                             bio = user.bio ?: "",
                             location = user.location ?: "",
                             website = user.website ?: "",
