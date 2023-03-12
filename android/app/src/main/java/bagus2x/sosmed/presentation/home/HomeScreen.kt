@@ -165,7 +165,9 @@ fun HomeScreen(
                             navigateToMediaDetailScreen(feed, video)
                         },
                         onFavoriteClicked = { favoriteFeed(feed) },
-                        onCommentClicked = { },
+                        onCommentClicked = {
+                            navigateToFeedDetailScreen(feed)
+                        },
                         onRepostClicked = { },
                         onSendClicked = {},
                         onFeedClicked = {
