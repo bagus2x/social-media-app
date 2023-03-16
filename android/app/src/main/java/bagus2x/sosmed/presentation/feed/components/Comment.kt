@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -43,7 +44,9 @@ fun Comment(
     onMentionClicked: (String) -> Unit,
 ) {
     val density = LocalDensity.current
-    val color = Color(0xFFDDDDDD)
+    val color = MaterialTheme.colors
+        .onBackground.copy(alpha = .12f)
+        .compositeOver(MaterialTheme.colors.background)
     val strokeWidth = with(density) { 1.dp.toPx() }
     Column(
         modifier = modifier
