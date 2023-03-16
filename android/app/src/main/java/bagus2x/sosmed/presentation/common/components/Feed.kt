@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,60 +36,60 @@ fun Feed(
     onMentionClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-   Surface(onClick = onFeedClicked) {
-       Column(modifier = modifier) {
-           Spacer(modifier = Modifier.height(12.dp))
-           val author = feed.author
-           AuthorFeed(
-               authorName = author.username,
-               authorPhoto = author.photo ?: Misc.getAvatar(author.username),
-               timestamp = Misc.formatRelative(feed.createdAt),
-               modifier = Modifier
-                   .padding(start = 16.dp, end = 4.dp)
-                   .fillMaxWidth(),
-               onOptionsClicked = {}
-           )
-           Spacer(modifier = Modifier.height(12.dp))
-           TextFormatter(
-               text = feed.description,
-               modifier = Modifier.padding(horizontal = 16.dp),
-               style = MaterialTheme.typography.body2,
-               maxLines = 4,
-               onClick = {
-                   detectClickUrl(onUrlClicked)
-                   detectClickMention(onMentionClicked)
-                   detectClickHashtag(onHashtagClicked)
-                   detectClickText { onFeedClicked() }
-               },
-               overflow = TextOverflow.Ellipsis
-           )
-           val medias = feed.medias
-           if (medias.isNotEmpty()) {
-               Spacer(modifier = Modifier.height(12.dp))
-               Medias(
-                   medias = medias,
-                   onImageClicked = onImageClicked,
-                   onVideoClicked = onVideoClicked,
-                   modifier = Modifier
-                       .fillMaxWidth()
-                       .aspectRatio(1f)
-               )
-           }
-           FeedActionButtons(
-               favorite = feed.favorite,
-               totalFavorites = feed.totalFavorites,
-               onFavoriteClicked = onFavoriteClicked,
-               totalComments = feed.totalComments,
-               onCommentClicked = onCommentClicked,
-               totalReposts = feed.totalReposts,
-               onRepostClicked = onRepostClicked,
-               onSendClicked = onSendClicked,
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .padding(horizontal = 4.dp),
-           )
-       }
-   }
+    Surface(onClick = onFeedClicked) {
+        Column(modifier = modifier) {
+            Spacer(modifier = Modifier.height(12.dp))
+            val author = feed.author
+            AuthorFeed(
+                authorName = author.username,
+                authorPhoto = author.photo ?: Misc.getAvatar(author.username),
+                timestamp = rememberSaveable { Misc.formatRelative(feed.createdAt) },
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 4.dp)
+                    .fillMaxWidth(),
+                onOptionsClicked = {}
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            TextFormatter(
+                text = feed.description,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                style = MaterialTheme.typography.body2,
+                maxLines = 4,
+                onClick = {
+                    detectClickUrl(onUrlClicked)
+                    detectClickMention(onMentionClicked)
+                    detectClickHashtag(onHashtagClicked)
+                    detectClickText { onFeedClicked() }
+                },
+                overflow = TextOverflow.Ellipsis
+            )
+            val medias = feed.medias
+            if (medias.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Medias(
+                    medias = medias,
+                    onImageClicked = onImageClicked,
+                    onVideoClicked = onVideoClicked,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                )
+            }
+            FeedActionButtons(
+                favorite = feed.favorite,
+                totalFavorites = feed.totalFavorites,
+                onFavoriteClicked = onFavoriteClicked,
+                totalComments = feed.totalComments,
+                onCommentClicked = onCommentClicked,
+                totalReposts = feed.totalReposts,
+                onRepostClicked = onRepostClicked,
+                onSendClicked = onSendClicked,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 4.dp),
+            )
+        }
+    }
 }
 
 @Composable
