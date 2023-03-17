@@ -1,15 +1,10 @@
 package bagus2x.sosmed.presentation.conversation.messages
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,7 +24,6 @@ import bagus2x.sosmed.presentation.conversation.messages.components.MessageBox
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun MessagesScreen(
@@ -131,16 +125,12 @@ fun MessagesScreen(
             ) { index, message ->
                 if (message != null) {
                     val own = message.sender.id == authUser?.id
-                    val date = getDateIndicator(
-                        prevMessage = runCatching { messages[index + 1] }.getOrNull(),
-                        message = message,
-                    )
                     Message(
                         message = message,
                         own = own,
                         columnHeight = this@Scaffold.maxHeight,
                         modifier = Modifier.fillMaxWidth(),
-                        date = date,
+                        prevMessage = runCatching { messages[index + 1] }.getOrNull(),
                         onClick = { }
                     )
                 }
@@ -151,19 +141,3 @@ fun MessagesScreen(
         }
     }
 }
-
-private val Formatter by lazy { DateTimeFormatter.ofPattern("dd MMM yyyy") }
-
-@Composable
-private fun getDateIndicator(
-    prevMessage: Message?,
-    message: Message,
-): String {
-    return rememberSaveable(prevMessage, message) {
-        if (message.createdAt.toLocalDate() != prevMessage?.createdAt?.toLocalDate())
-            Formatter.format(message.createdAt)
-        else
-            ""
-    }
-}
-

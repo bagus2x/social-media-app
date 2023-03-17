@@ -35,12 +35,12 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun Message(
-    message: Message,
-    own: Boolean,
     modifier: Modifier = Modifier,
+    message: Message,
+    prevMessage: Message? = null,
+    own: Boolean,
     onClick: (() -> Unit)? = null,
     columnHeight: Dp,
-    date: String? = null
 ) {
     var topOffset by remember { mutableStateOf(0f) }
     var bottomOffset by remember { mutableStateOf(0f) }
@@ -50,7 +50,8 @@ fun Message(
             bottomOffset = layoutCoordinates.boundsInParent().bottom
         },
     ) {
-        if (!date.isNullOrBlank()) {
+        val date = formatDate(prevMessage, message)
+        if (date.isNotBlank()) {
             Text(
                 text = date,
                 style = MaterialTheme.typography.body2,
@@ -146,3 +147,16 @@ private val ReceivedMessageShape = RoundedCornerShape(32.dp, 32.dp, 32.dp, 4.dp)
 private val ArgbEvaluator = ArgbEvaluator()
 private val TopColor = AppColor.Purple500.toArgb()
 private val BottomColor = AppColor.LightBlue500.toArgb()
+
+@Composable
+private fun formatDate(
+    prevMessage: Message?,
+    message: Message,
+): String {
+    return rememberSaveable(prevMessage, message) {
+        if (message.createdAt.toLocalDate() != prevMessage?.createdAt?.toLocalDate())
+            Misc.formatDate(message.createdAt)
+        else
+            ""
+    }
+}
