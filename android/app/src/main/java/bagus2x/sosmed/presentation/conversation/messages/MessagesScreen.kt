@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -53,7 +51,7 @@ fun MessagesScreen(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MessagesScreen(
     stateProvider: () -> MessagesState,
@@ -133,30 +131,18 @@ fun MessagesScreen(
             ) { index, message ->
                 if (message != null) {
                     val own = message.sender.id == authUser?.id
-                    Column(
-                        modifier = Modifier
-                            .animateItemPlacement()
-                            .fillMaxWidth(),
-                    ) {
-                        val date = rememberSaveable {
-                            getDateIndicator(
-                                prevMessage = runCatching { messages[index + 1] }.getOrNull(),
-                                message = message,
-                            )
-                        }
-                        if (date.isNotBlank()) {
-                            Text(
-                                text = date,
-                                style = MaterialTheme.typography.body2,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-                        }
-                        Message(
-                            message = message,
-                            own = own,
-                            modifier = Modifier.align(if (own) Alignment.End else Alignment.Start)
-                        )
-                    }
+                    val date = getDateIndicator(
+                        prevMessage = runCatching { messages[index + 1] }.getOrNull(),
+                        message = message,
+                    )
+                    Message(
+                        message = message,
+                        own = own,
+                        columnHeight = this@Scaffold.maxHeight,
+                        modifier = Modifier.fillMaxWidth(),
+                        date = date,
+                        onClick = { }
+                    )
                 }
             }
         }
@@ -168,13 +154,16 @@ fun MessagesScreen(
 
 private val Formatter by lazy { DateTimeFormatter.ofPattern("dd MMM yyyy") }
 
+@Composable
 private fun getDateIndicator(
     prevMessage: Message?,
     message: Message,
 ): String {
-    return if (message.createdAt.toLocalDate() != prevMessage?.createdAt?.toLocalDate())
-        Formatter.format(message.createdAt)
-    else
-        ""
+    return rememberSaveable(prevMessage, message) {
+        if (message.createdAt.toLocalDate() != prevMessage?.createdAt?.toLocalDate())
+            Formatter.format(message.createdAt)
+        else
+            ""
+    }
 }
 
