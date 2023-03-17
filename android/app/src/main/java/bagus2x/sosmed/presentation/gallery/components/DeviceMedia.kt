@@ -21,9 +21,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bagus2x.sosmed.R
-import bagus2x.sosmed.presentation.common.media.DeviceMedia
-import bagus2x.sosmed.presentation.common.theme.Green500
 import bagus2x.sosmed.presentation.common.components.Image
+import bagus2x.sosmed.presentation.common.media.DeviceMedia
+import bagus2x.sosmed.presentation.common.theme.AppColor
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 
@@ -99,7 +99,7 @@ fun DeviceMedia(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .clip(CircleShape)
-                    .background(Green500),
+                    .background(AppColor.Green500),
                 tint = Color.White,
             )
         }
