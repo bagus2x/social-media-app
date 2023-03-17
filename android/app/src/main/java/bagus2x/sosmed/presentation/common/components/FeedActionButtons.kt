@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import bagus2x.sosmed.R
 import bagus2x.sosmed.presentation.common.noRippleClickable
-import bagus2x.sosmed.presentation.common.theme.Pink500
+import bagus2x.sosmed.presentation.common.theme.AppColor
 import java.util.*
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -132,7 +132,7 @@ fun FavoriteButton(
                 Icon(
                     painter = painterResource(R.drawable.ic_heart_filled),
                     contentDescription = null,
-                    tint = Pink500.copy(alpha = LocalContentAlpha.current),
+                    tint = AppColor.Pink500.copy(alpha = LocalContentAlpha.current),
                     modifier = Modifier.size(iconSize)
                 )
             }

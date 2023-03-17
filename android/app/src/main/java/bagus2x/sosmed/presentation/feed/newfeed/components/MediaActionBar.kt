@@ -18,9 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bagus2x.sosmed.R
-import bagus2x.sosmed.presentation.common.theme.LightBlue500
-import bagus2x.sosmed.presentation.common.theme.Red500
-import bagus2x.sosmed.presentation.common.theme.Yellow500
+import bagus2x.sosmed.presentation.common.theme.AppColor
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -66,9 +64,9 @@ fun MediaActionBar(
         ) {
             val progressColor by animateColorAsState(
                 targetValue = when {
-                    textLength > 500 -> Red500
-                    textLength > 450 -> Yellow500
-                    else -> LightBlue500
+                    textLength > 500 -> AppColor.Red500
+                    textLength > 450 -> AppColor.Yellow500
+                    else -> AppColor.LightBlue500
                 }
             )
             val scale by animateFloatAsState(
@@ -88,7 +86,7 @@ fun MediaActionBar(
             }
             val textColor by animateColorAsState(
                 targetValue = when {
-                    textLength > 500 -> Red500
+                    textLength > 500 -> AppColor.Red500
                     else -> MaterialTheme.colors.onBackground
                 }
             )

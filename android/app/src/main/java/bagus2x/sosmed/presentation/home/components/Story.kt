@@ -23,8 +23,7 @@ import androidx.compose.ui.unit.sp
 import bagus2x.sosmed.domain.model.Story
 import bagus2x.sosmed.presentation.common.Misc
 import bagus2x.sosmed.presentation.common.components.Image
-import bagus2x.sosmed.presentation.common.theme.LightBlue500
-import bagus2x.sosmed.presentation.common.theme.Pink200
+import bagus2x.sosmed.presentation.common.theme.AppColor
 
 @Composable
 fun Story(
@@ -81,7 +80,7 @@ private fun Modifier.unseenAnimation(enabled: Boolean): Modifier = composed {
             )
         )
     )
-    val colors = remember { listOf(Pink200, LightBlue500, Pink200) }
+    val colors = remember { listOf(AppColor.Pink200, AppColor.LightBlue500, AppColor.Pink200) }
     drawBehind {
         rotate(degrees = degreesAnimation) {
             drawCircle(

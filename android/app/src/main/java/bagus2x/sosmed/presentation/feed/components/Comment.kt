@@ -26,7 +26,7 @@ import bagus2x.sosmed.presentation.common.Misc
 import bagus2x.sosmed.presentation.common.components.Image
 import bagus2x.sosmed.presentation.common.components.TextFormatter
 import bagus2x.sosmed.presentation.common.noRippleClickable
-import bagus2x.sosmed.presentation.common.theme.Pink500
+import bagus2x.sosmed.presentation.common.theme.AppColor
 import bagus2x.sosmed.presentation.feed.comment.ShowMoreButton
 
 @Composable
@@ -204,7 +204,7 @@ private fun FavoriteButton(
             Icon(
                 painter = painterResource(R.drawable.ic_heart_filled),
                 contentDescription = null,
-                tint = Pink500.copy(alpha = LocalContentAlpha.current),
+                tint = AppColor.Pink500.copy(alpha = LocalContentAlpha.current),
                 modifier = modifier
                     .size(16.dp)
                     .noRippleClickable(onClick = onClick)

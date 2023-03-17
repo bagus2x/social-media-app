@@ -19,9 +19,9 @@ import bagus2x.sosmed.R
 import bagus2x.sosmed.domain.model.User
 import bagus2x.sosmed.presentation.common.Misc
 import bagus2x.sosmed.presentation.common.components.Image
-import bagus2x.sosmed.presentation.common.theme.Green500
+import bagus2x.sosmed.presentation.common.theme.AppColor
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun User(
     user: User,
@@ -66,7 +66,7 @@ fun User(
                 Icon(
                     painter = painterResource(R.drawable.ic_complete_outlined),
                     contentDescription = null,
-                    tint = Green500
+                    tint = AppColor.Green500
                 )
             }
         }

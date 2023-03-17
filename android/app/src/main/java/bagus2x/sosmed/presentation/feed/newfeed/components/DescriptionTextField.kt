@@ -10,7 +10,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
-import bagus2x.sosmed.presentation.common.theme.Red100
+import bagus2x.sosmed.presentation.common.theme.AppColor
 
 @Composable
 fun DescriptionTextField(
@@ -28,7 +28,7 @@ fun DescriptionTextField(
                     if (text.length > 500) {
                         addStyle(
                             SpanStyle(
-                                background = Red100
+                                background = AppColor.Red100
                             ),
                             500,
                             text.length
