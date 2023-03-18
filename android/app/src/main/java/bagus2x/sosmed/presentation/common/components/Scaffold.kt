@@ -1,9 +1,6 @@
 package bagus2x.sosmed.presentation.common.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,7 +27,7 @@ fun Scaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    content: @Composable BoxScope.() -> Unit
+    content: @Composable BoxWithConstraintsScope.() -> Unit
 ) {
     androidx.compose.material.Scaffold(
         modifier,
@@ -51,7 +48,7 @@ fun Scaffold(
         backgroundColor,
         contentColor,
     ) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier.padding(it),
             content = content
         )
