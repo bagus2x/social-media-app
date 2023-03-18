@@ -29,7 +29,7 @@ import bagus2x.sosmed.presentation.common.LocalShowSnackbar
 import bagus2x.sosmed.presentation.common.components.LocalProvider
 import bagus2x.sosmed.presentation.common.components.Scaffold
 import bagus2x.sosmed.presentation.common.connectivity.NetworkTracker
-import bagus2x.sosmed.presentation.common.theme.Green500
+import bagus2x.sosmed.presentation.common.theme.AppColor
 import bagus2x.sosmed.presentation.conversation.ChatScreen
 import bagus2x.sosmed.presentation.explore.TrendingScreen
 import bagus2x.sosmed.presentation.home.HomeScreen
@@ -200,7 +200,7 @@ fun NetworkStatus(
         val color by animateColorAsState(
             targetValue = when (status) {
                 is NetworkTracker.Unavailable -> MaterialTheme.colors.error
-                is NetworkTracker.Available, is NetworkTracker.Init -> Green500
+                is NetworkTracker.Available, is NetworkTracker.Init -> AppColor.Green500
             }
         )
         val height = with(LocalDensity.current) {
