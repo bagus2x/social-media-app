@@ -15,16 +15,25 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import bagus2x.sosmed.R
 import bagus2x.sosmed.domain.model.Media
 import bagus2x.sosmed.presentation.common.components.Image
+import bagus2x.sosmed.presentation.common.components.VideoPlayer
 import bagus2x.sosmed.presentation.common.components.dominantColor
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
@@ -103,7 +112,37 @@ fun MediaDetailScreen(
                     }
                 }
             }
-
+            val context = LocalContext.current
+            val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+            val lifecycleOwner = LocalLifecycleOwner.current
+            DisposableEffect(lifecycleOwner) {
+                val observer = LifecycleEventObserver { _, event ->
+                    when (event) {
+                        Lifecycle.Event.ON_RESUME -> exoPlayer.play()
+                        Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
+                        else -> {}
+                    }
+                }
+                lifecycleOwner.lifecycle.addObserver(observer)
+                onDispose {
+                    lifecycleOwner.lifecycle.removeObserver(observer)
+                    exoPlayer.release()
+                }
+            }
+            LaunchedEffect(Unit) {
+                snapshotFlow { pagerState.currentPage }
+                    .map { state.feed.medias[it] }
+                    .collectLatest { media ->
+                        if (media is Media.Video) {
+                            exoPlayer.setMediaItem(MediaItem.fromUri(media.videoUrl))
+                            exoPlayer.prepare()
+                            exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ONE
+                            exoPlayer.playWhenReady = true
+                        } else {
+                            exoPlayer.pause()
+                        }
+                    }
+            }
             HorizontalPager(
                 pageCount = state.feed.medias.size,
                 state = pagerState
@@ -121,11 +160,11 @@ fun MediaDetailScreen(
                         )
                     }
                     if (media is Media.Video) {
-                        Image(
-                            model = media.thumbnailUrl,
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxWidth(),
-                            contentScale = ContentScale.FillWidth
+                        VideoPlayer(
+                            thumbnail = media.thumbnailUrl,
+                            playing = pagerState.currentPage == index,
+                            player = exoPlayer,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }
