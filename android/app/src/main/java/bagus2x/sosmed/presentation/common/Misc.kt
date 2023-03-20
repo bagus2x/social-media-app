@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.time.Duration
 
 object Misc {
     private val DateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
@@ -24,6 +25,19 @@ object Misc {
 
     fun formatDate(date: LocalDateTime): String {
         return DateFormatter.format(date)
+    }
+
+    fun formatDuration(duration: Duration): String {
+        return duration.toComponents { hours, minutes, seconds, _ ->
+            when {
+                hours > 0 -> "${hours.toString().padStart(2, '0')}:${
+                    minutes.toString().padStart(2, '0')
+                }:${seconds.toString().padStart(2, '0')}"
+                else -> "${minutes.toString().padStart(2, '0')}:${
+                    seconds.toString().padStart(2, '0')
+                }"
+            }
+        }
     }
 
     fun getRandomFileName(): String {
