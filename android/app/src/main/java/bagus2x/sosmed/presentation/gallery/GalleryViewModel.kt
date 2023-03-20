@@ -23,8 +23,10 @@ class GalleryViewModel @Inject constructor(
     val state = _state.asStateFlow()
     val deviceMedias = state
         .filter { it.shouldLoad }
-        .flatMapLatest { state ->
-            val flow = when (state.type) {
+        .map { it.type }
+        .distinctUntilChanged()
+        .flatMapLatest { type ->
+            val flow = when (type) {
                 is MediaType.Image -> deviceMediaManager.getImages(pageSize = 20)
                 is MediaType.Video -> deviceMediaManager.getVideos(pageSize = 20)
                 is MediaType.ImageAndVideo -> deviceMediaManager.getImagesAndVideos(pageSize = 20)
