@@ -7,6 +7,9 @@ dev:
 build:
 	go build -x main.go
 
+run-build:
+	./main
+
 build-w:
 	GOOS=linux GOARCH=amd64 go build main.go
 
