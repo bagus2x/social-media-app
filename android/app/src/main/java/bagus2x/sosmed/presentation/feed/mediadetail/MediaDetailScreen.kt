@@ -2,7 +2,6 @@ package bagus2x.sosmed.presentation.feed.mediadetail
 
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
@@ -24,10 +23,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import bagus2x.sosmed.R
 import bagus2x.sosmed.domain.model.Media
-import bagus2x.sosmed.presentation.common.components.Image
-import bagus2x.sosmed.presentation.common.components.VideoPlayer
-import bagus2x.sosmed.presentation.common.components.dominantColor
-import bagus2x.sosmed.presentation.common.components.rememberExoPlayerState
+import bagus2x.sosmed.presentation.common.components.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
@@ -110,18 +106,18 @@ fun MediaDetailScreen(
                     }
                 }
             }
-            val exoPlayer = rememberExoPlayerState()
+            val playerState = rememberExoPlayerState()
             LaunchedEffect(Unit) {
                 snapshotFlow { pagerState.currentPage }
                     .map { state.feed.medias[it] }
                     .collectLatest { media ->
                         if (media is Media.Video) {
-                            exoPlayer.setMediaItem(MediaItem.fromUri(media.videoUrl))
-                            exoPlayer.prepare()
-                            exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ONE
-                            exoPlayer.playWhenReady = true
+                            playerState.setMediaItem(MediaItem.fromUri(media.videoUrl))
+                            playerState.prepare()
+                            playerState.repeatMode = ExoPlayer.REPEAT_MODE_ONE
+                            playerState.playWhenReady = true
                         } else {
-                            exoPlayer.pause()
+                            playerState.pause()
                         }
                     }
             }
@@ -142,18 +138,17 @@ fun MediaDetailScreen(
                         )
                     }
                     if (media is Media.Video) {
-                        Box {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .navigationBarsPadding()
+                        ) {
                             VideoPlayer(
                                 thumbnail = media.thumbnailUrl,
                                 playing = pagerState.currentPage == index,
-                                player = exoPlayer,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            Text(
-                                text = "${exoPlayer.currentPosition.inWholeSeconds} / ${exoPlayer.duration.inWholeSeconds}",
-                                modifier = Modifier
-                                    .background(Color.Red)
-                                    .align(Alignment.Center)
+                                state = playerState,
+                                modifier = Modifier.fillMaxWidth(),
+                                useController = true
                             )
                         }
                     }

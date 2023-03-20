@@ -1,16 +1,20 @@
 package bagus2x.sosmed.presentation.common.components
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -19,9 +23,13 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+import bagus2x.sosmed.R
+import bagus2x.sosmed.presentation.common.Misc
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.roundToLong
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -30,7 +38,7 @@ import kotlin.time.Duration.Companion.seconds
 @androidx.annotation.OptIn(UnstableApi::class)
 fun VideoPlayer(
     modifier: Modifier = Modifier,
-    player: ExoPlayer,
+    state: VideoPlayerState,
     onControllerVisibilityChanged: ((Boolean) -> Unit)? = null,
     useController: Boolean = false,
     resizeMode: Int = AspectRatioFrameLayout.RESIZE_MODE_FIT
@@ -40,7 +48,7 @@ fun VideoPlayer(
     val playerView = remember {
         PlayerView(context).apply {
             this.useController = useController
-            this.player = player
+            this.player = state
             this.resizeMode = resizeMode
             this.id = View.generateViewId()
             onControllerVisibilityChanged?.let {
@@ -77,20 +85,81 @@ fun VideoPlayer(
     playing: Boolean,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
-    player: ExoPlayer,
-    onControllerVisibilityChanged: ((Boolean) -> Unit)? = null,
+    state: VideoPlayerState,
     useController: Boolean = false,
     resizeMode: Int = AspectRatioFrameLayout.RESIZE_MODE_FIT
 ) {
     Box(modifier = modifier) {
         if (playing) {
             VideoPlayer(
-                player = player,
-                onControllerVisibilityChanged = onControllerVisibilityChanged,
-                useController = useController,
+                state = state,
                 resizeMode = resizeMode,
                 modifier = Modifier.fillMaxSize()
             )
+            if (useController) {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(top = 16.dp, bottom = 4.dp),
+                ) {
+                    Slider(
+                        value = state.currentProgress,
+                        onValueChange = state::seekTo,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .offset(y = 24.dp),
+                        colors = SliderDefaults.colors(
+                            thumbColor = Color.White,
+                            activeTrackColor = Color.White
+                        )
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        IconButton(
+                            onClick = {
+                                if (state.isPlaying) {
+                                    state.pause()
+                                } else {
+                                    state.play()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(if (state.isPlaying) R.drawable.ic_pause_filled else R.drawable.ic_play_filled),
+                                contentDescription = null,
+                                tint = Color.White.copy(alpha = ContentAlpha.medium)
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                if (state.isMuted) {
+                                    state.setVolume(1f)
+                                } else {
+                                    state.setVolume(0f)
+                                }
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(if (state.isMuted) R.drawable.ic_audio_off_outlined else R.drawable.ic_audio_on_outlined),
+                                contentDescription = null,
+                                tint = Color.White.copy(alpha = ContentAlpha.medium)
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = state.formatCurrentProgress,
+                            style = MaterialTheme.typography.body2,
+                            color = Color.White.copy(alpha = ContentAlpha.medium),
+                            modifier = Modifier.padding(end = 16.dp)
+                        )
+                    }
+                }
+                if (state.isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+            }
         } else {
             Image(
                 model = thumbnail,
@@ -102,23 +171,41 @@ fun VideoPlayer(
     }
 }
 
-@Suppress("Unused")
-private val Duration.formatted: String
-    get() = toComponents { minutes, seconds, _ ->
-        String.format("%d:%02d", minutes, seconds)
-    }
+private val VideoPlayerState.formatCurrentProgress: String
+    get() = "${Misc.formatDuration(currentPosition)} / ${Misc.formatDuration(duration)}"
 
-class ExoPlayerState(
-    context: Context,
-    private val scope: CoroutineScope
-) : ExoPlayer by ExoPlayer.Builder(context).build(), Player.Listener {
-    @get:JvmName("playing")
+class VideoPlayerState(
+    private val exoPlayer: ExoPlayer,
+    private val scope: CoroutineScope,
+    private val updatePlaybackStateInterval: Duration
+) : ExoPlayer by exoPlayer, Player.Listener {
+    @get:JvmName("isPlayingX")
     var isPlaying by mutableStateOf(false)
         private set
     var duration by mutableStateOf(0.seconds)
         private set
     var currentPosition by mutableStateOf(0.seconds)
         private set
+    val currentProgress by derivedStateOf {
+        val progress = (currentPosition / duration).toFloat()
+        if (progress.isNaN() || progress.isInfinite()) 0f
+        else progress
+    }
+
+    @get:JvmName("getVolumeX")
+    @set:JvmName("setVolumeX")
+    var volume by mutableStateOf(getVolume())
+        private set
+    val isMuted by derivedStateOf { volume == 0f }
+
+    @get:JvmName("isLoadingX")
+    var isLoading by mutableStateOf(false)
+        private set
+    var isBuffering by mutableStateOf(false)
+        private set
+    var bufferedPercentage by mutableStateOf(0f)
+        private set
+    private var playbackStateJob: Job? = null
 
     init {
         addListener(this)
@@ -129,41 +216,68 @@ class ExoPlayerState(
 
         this.isPlaying = isPlaying
         this.duration = getDuration().milliseconds
+    }
 
-        scope.launch {
+    override fun onIsLoadingChanged(isLoading: Boolean) {
+        super.onIsLoadingChanged(isLoading)
+
+        this.isLoading = isLoading
+    }
+
+    override fun onPlaybackStateChanged(playbackState: Int) {
+        super.onPlaybackStateChanged(playbackState)
+
+        isBuffering = playbackState == Player.STATE_BUFFERING
+
+        playbackStateJob?.cancel()
+        playbackStateJob = scope.launch {
             while (true) {
-                this@ExoPlayerState.currentPosition = getCurrentPosition().milliseconds
-                delay(200)
+                this@VideoPlayerState.currentPosition = getCurrentPosition().milliseconds
+                this@VideoPlayerState.bufferedPercentage = getBufferedPercentage().toFloat()
+                delay(updatePlaybackStateInterval)
             }
         }
+    }
+
+    override fun setVolume(volume: Float) {
+        exoPlayer.volume = volume
+        this.volume = volume
+    }
+
+    fun seekTo(progress: Float) {
+        seekTo((progress * duration.inWholeMilliseconds).roundToLong())
     }
 }
 
 @Composable
 fun rememberExoPlayerState(
-    lifecycleAware: Boolean = true
-): ExoPlayerState {
+    lifecycleAware: Boolean = true,
+    updatePlaybackStateInterval: Duration = 300.milliseconds
+): VideoPlayerState {
     val context = LocalContext.current
+    val exoPlayer = ExoPlayer.Builder(context).build()
     val scope = rememberCoroutineScope()
-    val exoPlayerState = remember { ExoPlayerState(context, scope) }
+    val videoPlayerState = remember {
+        VideoPlayerState(exoPlayer, scope, updatePlaybackStateInterval)
+    }
     val lifecycleOwner = LocalLifecycleOwner.current
 
     if (lifecycleAware) {
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
-                    Lifecycle.Event.ON_RESUME -> exoPlayerState.play()
-                    Lifecycle.Event.ON_PAUSE -> exoPlayerState.pause()
+                    Lifecycle.Event.ON_RESUME -> videoPlayerState.play()
+                    Lifecycle.Event.ON_PAUSE -> videoPlayerState.pause()
                     else -> {}
                 }
             }
             lifecycleOwner.lifecycle.addObserver(observer)
             onDispose {
                 lifecycleOwner.lifecycle.removeObserver(observer)
-                exoPlayerState.release()
+                videoPlayerState.release()
             }
         }
     }
 
-    return exoPlayerState
+    return videoPlayerState
 }
