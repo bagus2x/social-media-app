@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   web:
+    container_name: 'sosmed-web-backend'
     build: .
     env_file:
       - app.env
@@ -13,7 +14,10 @@ services:
     links:
       - db
   db:
+    container_name: 'sosmed-postgres'
     image: postgres:alpine
+    env_file:
+      - app.env
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -23,7 +27,10 @@ services:
     volumes:
       - postgres-db:/var/lib/postgresql/data
   migrate:
+    container_name: 'sosmed-migrate'
     image: migrate/migrate
+    env_file:
+      - app.env
     volumes:
       - .:/migration
     command: "migrate -source file://migration -database ${POSTGRES_URI} up"
