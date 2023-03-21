@@ -1,8 +1,8 @@
 package bagus2x.sosmed.presentation.common.uploader
 
 import android.content.Context
+import bagus2x.sosmed.data.common.Misc.HTTP_BASE_URL
 import bagus2x.sosmed.data.common.ktor
-import bagus2x.sosmed.data.remote.HTTP_BASE_URL
 import bagus2x.sosmed.presentation.common.BitmapUtils
 import bagus2x.sosmed.presentation.common.media.DeviceMedia
 import id.zelory.compressor.Compressor

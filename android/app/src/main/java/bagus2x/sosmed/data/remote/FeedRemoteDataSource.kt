@@ -1,5 +1,6 @@
 package bagus2x.sosmed.data.remote
 
+import bagus2x.sosmed.data.common.Misc.HTTP_BASE_URL
 import bagus2x.sosmed.data.common.ktor
 import bagus2x.sosmed.data.remote.dto.FeedDTO
 import bagus2x.sosmed.data.remote.dto.MediaDTO
@@ -7,8 +8,6 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-
-const val HTTP_BASE_URL = "http://192.168.1.109:8080"
 
 class FeedRemoteDataSource(
     private val client: HttpClient

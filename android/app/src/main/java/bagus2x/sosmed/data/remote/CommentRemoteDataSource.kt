@@ -1,5 +1,6 @@
 package bagus2x.sosmed.data.remote
 
+import bagus2x.sosmed.data.common.Misc.HTTP_BASE_URL
 import bagus2x.sosmed.data.common.ktor
 import bagus2x.sosmed.data.remote.dto.CommentDTO
 import bagus2x.sosmed.data.remote.dto.MediaDTO

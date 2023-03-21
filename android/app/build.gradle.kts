@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+val httpBaseUrl: String by project
+val wsBaseUrl: String by project
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -32,7 +35,13 @@ android {
         }
     }
     buildTypes {
+        named("debug") {
+            buildConfigField("String", "HTTP_BASE_URL", """"$httpBaseUrl"""")
+            buildConfigField("String", "WS_BASE_URL", """"$wsBaseUrl"""")
+        }
         named("release") {
+            buildConfigField("String", "HTTP_BASE_URL", """"$httpBaseUrl"""")
+            buildConfigField("String", "WS_BASE_URL", """"$wsBaseUrl"""")
             isMinifyEnabled = true
             isShrinkResources = true
             setProguardFiles(
@@ -69,8 +78,6 @@ android {
 
 dependencies {
     val composeUiVersion = "1.4.0-rc01"
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")

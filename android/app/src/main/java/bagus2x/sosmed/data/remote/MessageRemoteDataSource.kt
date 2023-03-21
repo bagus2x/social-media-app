@@ -1,5 +1,7 @@
 package bagus2x.sosmed.data.remote
 
+import bagus2x.sosmed.data.common.Misc.HTTP_BASE_URL
+import bagus2x.sosmed.data.common.Misc.WS_BASE_URL
 import bagus2x.sosmed.data.common.ktor
 import bagus2x.sosmed.data.remote.dto.MediaDTO
 import bagus2x.sosmed.data.remote.dto.MessageDTO
@@ -16,8 +18,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.concurrent.ConcurrentHashMap
-
-const val WS_BASE_URL = "ws://192.168.1.109:8080"
 
 class MessageRemoteDataSource(
     private val client: HttpClient
