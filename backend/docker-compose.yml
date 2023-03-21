@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    env_file:
+      - app.env
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    command: go run main.go -b 0.0.0.0
+    links:
+      - db
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5555:5555"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+  migrate:
+    image: migrate/migrate
+    volumes:
+      - .:/migration
+    command: "migrate -source file://migration -database ${POSTGRES_URI} up"
+    links:
+      - db
+
+volumes:
+  postgres-db:
