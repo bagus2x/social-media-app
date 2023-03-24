@@ -67,7 +67,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.4.4"
     }
     packagingOptions {
         resources {
@@ -77,7 +77,7 @@ android {
 }
 
 dependencies {
-    val composeUiVersion = "1.4.0-rc01"
+    val composeUiVersion = "1.4.0"
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
@@ -85,10 +85,10 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.activity:activity-compose:1.7.0")
     implementation("androidx.compose.ui:ui:$composeUiVersion")
-    implementation("androidx.compose.ui:ui-tooling-preview:$composeUiVersion")
-    implementation("androidx.compose.material:material:1.4.0-rc01")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.0")
+    implementation("androidx.compose.material:material:1.5.0-alpha01")
     implementation("androidx.compose.ui:ui-text-google-fonts:$composeUiVersion")
 
     val lifecycleVersion = "2.6.0"
@@ -104,8 +104,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.45")
+    kapt("com.google.dagger:hilt-compiler:2.45")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // Logging
@@ -118,7 +118,7 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-paging:$roomVersion")
 
-    implementation("org.jsoup:jsoup:1.15.3")
+    implementation("org.jsoup:jsoup:1.15.4")
 
     val pagingVersion = "3.1.1"
     implementation("androidx.paging:paging-runtime:$pagingVersion")
@@ -127,24 +127,24 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("io.coil-kt:coil-video:2.2.2")
 
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha08")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha09")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
     // Exo Player
-    implementation("androidx.media3:media3-exoplayer:1.0.0-rc02")
-    implementation("androidx.media3:media3-ui:1.0.0-rc02")
+    implementation("androidx.media3:media3-exoplayer:1.0.0")
+    implementation("androidx.media3:media3-ui:1.0.0")
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
-    implementation("com.google.accompanist:accompanist-navigation-material:0.29.1-alpha")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.29.1-alpha")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.29.1-alpha")
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.29.1-alpha")
+    implementation("com.google.accompanist:accompanist-permissions:0.29.2-rc")
+    implementation("com.google.accompanist:accompanist-navigation-material:0.29.2-rc")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.29.2-rc")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.29.2-rc")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.29.2-rc")
 
     // Camera X
-    implementation("androidx.camera:camera-camera2:1.2.1")
-    implementation("androidx.camera:camera-lifecycle:1.2.1")
-    implementation("androidx.camera:camera-view:1.2.1")
+    implementation("androidx.camera:camera-camera2:1.2.2")
+    implementation("androidx.camera:camera-lifecycle:1.2.2")
+    implementation("androidx.camera:camera-view:1.2.2")
 
     implementation("androidx.palette:palette:1.0.0")
 
@@ -158,17 +158,17 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Ktor
-    val ktorVersion = "2.2.3"
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    val ktorVersion = "2.2.4"
+    implementation("io.ktor:ktor-client-core:2.2.4")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:2.2.4")
     implementation("io.ktor:ktor-client-auth:$ktorVersion")
     implementation("io.ktor:ktor-client-websockets:$ktorVersion")
 
     // Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     implementation("id.zelory:compressor:3.0.1")
 
