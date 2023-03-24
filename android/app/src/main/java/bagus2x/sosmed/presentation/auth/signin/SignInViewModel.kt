@@ -38,6 +38,7 @@ class SignInViewModel @Inject constructor(
                     email = state.value.email,
                     password = state.value.password
                 )
+                _state.update { state -> state.copy(authenticated = true) }
             } catch (e: Exception) {
                 _state.update { it.copy(snackbar = e.message ?: "Failed to sign in") }
                 Timber.e(e)

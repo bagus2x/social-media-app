@@ -35,7 +35,8 @@ fun SignUpScreen(
         signIn = viewModel::signIn,
         navigateToSignInScreen = {
             navController.navigate(SignInScreen())
-        }
+        },
+        navigateUp = navController::navigateUp
     )
 }
 
@@ -47,16 +48,20 @@ fun SignUpScreen(
     setEmail: (String) -> Unit,
     setPassword: (String) -> Unit,
     signIn: () -> Unit,
-    navigateToSignInScreen: () -> Unit
+    navigateToSignInScreen: () -> Unit,
+    navigateUp: () -> Unit
 ) {
     val state = stateProvider()
     val showSnackbar = LocalShowSnackbar.current
 
     LaunchedEffect(Unit) {
-        snapshotFlow { state }.collectLatest { state ->
+        snapshotFlow { stateProvider() }.collectLatest { state ->
             if (state.snackbar.isNotBlank()) {
                 showSnackbar(state.snackbar)
                 snackbarConsumed()
+            }
+            if (state.authenticated) {
+                navigateUp()
             }
         }
     }

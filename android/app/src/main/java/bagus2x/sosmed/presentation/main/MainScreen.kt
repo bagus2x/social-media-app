@@ -56,7 +56,8 @@ fun MainScreen(
         bottomSheetNavigator = bottomSheetNavigator,
         sheetShape = RectangleShape,
         sheetBackgroundColor = Color.Transparent,
-        sheetContentColor = MaterialTheme.colors.onBackground
+        sheetContentColor = MaterialTheme.colors.onBackground,
+        sheetElevation = 0.dp
     ) {
         val scaffoldState = rememberScaffoldState()
         val scope = rememberCoroutineScope()
@@ -67,12 +68,10 @@ fun MainScreen(
                 }
             }
         }
-        val auth by viewModel.auth.collectAsStateWithLifecycle()
-        val authUser by viewModel.authUser.collectAsStateWithLifecycle()
-        val networkStatus by viewModel.networkStatus.collectAsStateWithLifecycle()
+        val state by viewModel.state.collectAsStateWithLifecycle()
         LocalProvider(
             LocalShowSnackbar provides showSnackbar,
-            LocalAuthenticatedUser provides authUser
+            LocalAuthenticatedUser provides state.authUser
         ) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
@@ -87,14 +86,14 @@ fun MainScreen(
                 NavGraph(
                     modifier = Modifier.fillMaxSize(),
                     navHostController = navController,
-                    authenticated = auth != null
+                    authStateProvider = { state.authState }
                 )
                 BottomNavigation(
                     navController = navController,
                     modifier = Modifier.align(Alignment.BottomStart)
                 )
                 NetworkStatus(
-                    status = networkStatus,
+                    state = state.networkState,
                     modifier = Modifier.align(Alignment.TopCenter)
                 )
             }
@@ -183,12 +182,12 @@ fun BottomNavigation(
 
 @Composable
 fun NetworkStatus(
-    status: NetworkTracker.Status,
+    state: NetworkTracker.State,
     modifier: Modifier = Modifier
 ) {
     var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(status) {
-        visible = status == NetworkTracker.Unavailable
+    LaunchedEffect(state) {
+        visible = state == NetworkTracker.Unavailable
     }
 
     AnimatedVisibility(
@@ -198,7 +197,7 @@ fun NetworkStatus(
         exit = slideOutVertically(animationSpec = tween(delayMillis = 2000)) { -it * 2 }
     ) {
         val color by animateColorAsState(
-            targetValue = when (status) {
+            targetValue = when (state) {
                 is NetworkTracker.Unavailable -> MaterialTheme.colors.error
                 is NetworkTracker.Available, is NetworkTracker.Init -> AppColor.Green500
             }
@@ -215,7 +214,7 @@ fun NetworkStatus(
                 .background(color)
         ) {
             Text(
-                text = when (status) {
+                text = when (state) {
                     is NetworkTracker.Unavailable -> stringResource(R.string.text_network_unavailable)
                     is NetworkTracker.Available, is NetworkTracker.Init -> stringResource(R.string.text_network_available)
                 },

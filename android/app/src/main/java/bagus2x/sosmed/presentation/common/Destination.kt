@@ -4,8 +4,15 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.*
+import bagus2x.sosmed.presentation.auth.SignInScreen
+import bagus2x.sosmed.presentation.main.AuthState
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet as bottomSheetComposable
@@ -55,6 +62,34 @@ abstract class Destination constructor(
     }
 
     context(NavGraphBuilder)
+    fun composable(navHostController: NavHostController, authStateProvider: () -> AuthState) {
+        @OptIn(ExperimentalAnimationApi::class)
+        composable(
+            route = this@Destination.route,
+            enterTransition = enterTransition,
+            exitTransition = exitTransition,
+            popEnterTransition = popEnterTransition,
+            popExitTransition = popExitTransition,
+            arguments = this@Destination.arguments,
+            deepLinks = this@Destination.deepLinks,
+        ) {
+            when (authStateProvider()) {
+                AuthState.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
+                }
+                AuthState.Unauthenticated -> {
+                    navHostController.navigate(SignInScreen())
+                }
+                is AuthState.Authenticated -> {
+                    screen(it, navHostController)
+                }
+            }
+        }
+    }
+
+    context(NavGraphBuilder)
     fun bottomSheet(navHostController: NavHostController) {
         @OptIn(ExperimentalMaterialNavigationApi::class)
         bottomSheetComposable(
@@ -63,6 +98,30 @@ abstract class Destination constructor(
             deepLinks = this@Destination.deepLinks,
             content = { screen(it, navHostController) }
         )
+    }
+
+    context(NavGraphBuilder)
+    fun bottomSheet(navHostController: NavHostController, authState: () -> AuthState) {
+        @OptIn(ExperimentalMaterialNavigationApi::class)
+        bottomSheetComposable(
+            route = this@Destination.route,
+            arguments = this@Destination.arguments,
+            deepLinks = this@Destination.deepLinks,
+        ) {
+            when (authState()) {
+                AuthState.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
+                }
+                AuthState.Unauthenticated -> {
+                    navHostController.navigate(SignInScreen())
+                }
+                is AuthState.Authenticated -> {
+                    screen(it, navHostController)
+                }
+            }
+        }
     }
 
     operator fun invoke(): String = authority

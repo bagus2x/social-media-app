@@ -26,40 +26,40 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 fun NavGraph(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    authenticated: Boolean
+    authStateProvider: () -> AuthState
 ) {
     AnimatedNavHost(
         navController = navHostController,
-        startDestination = if (authenticated) HomeScreen() else SignInScreen(),
+        startDestination = HomeScreen(),
         modifier = modifier
     ) {
-        HomeScreen.composable(navHostController)
-        TrendingScreen.composable(navHostController)
-        SearchScreen.composable(navHostController)
-        SearchSheet.bottomSheet(navHostController)
-        NotificationScreen.composable(navHostController)
-        NewFeedScreen.composable(navHostController)
-        ProfileScreen.composable(navHostController)
-        ProfileSettingsScreen.composable(navHostController)
-        MyProfileScreen.composable(navHostController)
-        EditProfileScreen.composable(navHostController)
-        MediaDetailScreen.composable(navHostController)
-        FeedDetailScreen.composable(navHostController)
+        HomeScreen.composable(navHostController, authStateProvider)
+        TrendingScreen.composable(navHostController, authStateProvider)
+        SearchScreen.composable(navHostController, authStateProvider)
+        SearchSheet.bottomSheet(navHostController, authStateProvider)
+        NotificationScreen.composable(navHostController, authStateProvider)
+        NewFeedScreen.composable(navHostController, authStateProvider)
+        ProfileScreen.composable(navHostController, authStateProvider)
+        ProfileSettingsScreen.composable(navHostController, authStateProvider)
+        MyProfileScreen.composable(navHostController, authStateProvider)
+        EditProfileScreen.composable(navHostController, authStateProvider)
+        MediaDetailScreen.composable(navHostController, authStateProvider)
+        FeedDetailScreen.composable(navHostController, authStateProvider)
         SignInScreen.composable(navHostController)
         SignUpScreen.composable(navHostController)
-        StoryDetailScreen.composable(navHostController)
-        CommentScreen.composable(navHostController)
-        ChatScreen.composable(navHostController)
-        MessagesScreen.composable(navHostController)
+        StoryDetailScreen.composable(navHostController, authStateProvider)
+        CommentScreen.composable(navHostController, authStateProvider)
+        ChatScreen.composable(navHostController, authStateProvider)
+        MessagesScreen.composable(navHostController, authStateProvider)
         navigation(
             route = "create_new_chat",
             startDestination = "new_chat"
         ) {
-            NewChatScreen.composable(navHostController)
-            NewGroupChatScreen.composable(navHostController)
+            NewChatScreen.composable(navHostController, authStateProvider)
+            NewGroupChatScreen.composable(navHostController, authStateProvider)
         }
-        ChatDetailScreen.composable(navHostController)
-        FollowersScreen.composable(navHostController)
-        FollowingScreen.composable(navHostController)
+        ChatDetailScreen.composable(navHostController, authStateProvider)
+        FollowersScreen.composable(navHostController, authStateProvider)
+        FollowingScreen.composable(navHostController, authStateProvider)
     }
 }
