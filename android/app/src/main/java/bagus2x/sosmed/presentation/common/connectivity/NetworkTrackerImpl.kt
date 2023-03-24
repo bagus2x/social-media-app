@@ -15,7 +15,7 @@ class NetworkTrackerImpl(context: Context) : NetworkTracker {
 
     private val connectivityManager = context.getSystemService<ConnectivityManager>()
 
-    override val flow: Flow<NetworkTracker.Status> = callbackFlow {
+    override val flow: Flow<NetworkTracker.State> = callbackFlow {
         val network = connectivityManager?.activeNetwork
         val activeNetwork = connectivityManager?.getNetworkCapabilities(network)
         if (activeNetwork != null) {
