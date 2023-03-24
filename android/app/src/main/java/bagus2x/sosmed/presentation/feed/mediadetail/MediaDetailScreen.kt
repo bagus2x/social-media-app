@@ -106,7 +106,7 @@ fun MediaDetailScreen(
                     }
                 }
             }
-            val playerState = rememberExoPlayerState()
+            val playerState = rememberVideoPlayerState()
             LaunchedEffect(Unit) {
                 snapshotFlow { pagerState.currentPage }
                     .map { state.feed.medias[it] }
@@ -148,7 +148,8 @@ fun MediaDetailScreen(
                                 playing = pagerState.currentPage == index,
                                 state = playerState,
                                 modifier = Modifier.fillMaxWidth(),
-                                useController = true
+                                useController = true,
+                                controllerColor = contentColor
                             )
                         }
                     }
