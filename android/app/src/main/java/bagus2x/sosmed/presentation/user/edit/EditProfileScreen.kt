@@ -27,9 +27,12 @@ import androidx.navigation.NavController
 import bagus2x.sosmed.R
 import bagus2x.sosmed.presentation.common.Misc
 import bagus2x.sosmed.presentation.common.components.Button
+import bagus2x.sosmed.presentation.common.components.DatePickerDialog
 import bagus2x.sosmed.presentation.common.components.Scaffold
 import bagus2x.sosmed.presentation.common.components.TextField
+import bagus2x.sosmed.presentation.common.components.rememberDatePickerDialogState
 import bagus2x.sosmed.presentation.common.media.DeviceMedia
+import bagus2x.sosmed.presentation.common.noRippleClickable
 import bagus2x.sosmed.presentation.gallery.contract.MediaType
 import bagus2x.sosmed.presentation.gallery.contract.SelectSingleMedia
 import coil.compose.AsyncImage
@@ -45,13 +48,17 @@ fun EditProfileScreen(
     val galleryPhoto = rememberLauncherForActivityResult(
         contract = SelectSingleMedia(),
         onResult = { media ->
-            viewModel.setPhoto((media as? DeviceMedia.Image) ?: return@rememberLauncherForActivityResult)
+            viewModel.setPhoto(
+                (media as? DeviceMedia.Image) ?: return@rememberLauncherForActivityResult
+            )
         }
     )
     val galleryHeader = rememberLauncherForActivityResult(
         contract = SelectSingleMedia(),
         onResult = { media ->
-            viewModel.setHeader((media as? DeviceMedia.Image) ?: return@rememberLauncherForActivityResult)
+            viewModel.setHeader(
+                (media as? DeviceMedia.Image) ?: return@rememberLauncherForActivityResult
+            )
         }
     )
     EditProfileScreen(
@@ -257,18 +264,27 @@ fun EditProfileScreen(
                 enabled = !state.loading,
                 contentPadding = PaddingValues(horizontal = 0.dp)
             )
+            val datePickerDialogState = rememberDatePickerDialogState(
+                currentDate = LocalDate.now().minusYears(10),
+                endDate = LocalDate.now(),
+            )
+            DatePickerDialog(
+                state = datePickerDialogState,
+                onResult = setDateOfBirth
+            )
             TextField(
                 value = state.dateOfBirth?.toString() ?: "",
                 onValueChange = setName,
                 maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .noRippleClickable { datePickerDialogState.show() },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 label = {
                     Text(text = "Date of birth")
                 },
-                enabled = !state.loading,
+                enabled = false,
                 contentPadding = PaddingValues(horizontal = 0.dp),
                 readOnly = true
             )
