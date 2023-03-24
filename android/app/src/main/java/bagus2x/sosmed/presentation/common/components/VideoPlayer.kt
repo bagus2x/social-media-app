@@ -87,7 +87,8 @@ fun VideoPlayer(
     contentDescription: String? = null,
     state: VideoPlayerState,
     useController: Boolean = false,
-    resizeMode: Int = AspectRatioFrameLayout.RESIZE_MODE_FIT
+    controllerColor: Color = Color.White,
+    resizeMode: Int = AspectRatioFrameLayout.RESIZE_MODE_FIT,
 ) {
     Box(modifier = modifier) {
         if (playing) {
@@ -110,8 +111,8 @@ fun VideoPlayer(
                             .fillMaxWidth()
                             .offset(y = 24.dp),
                         colors = SliderDefaults.colors(
-                            thumbColor = Color.White,
-                            activeTrackColor = Color.White
+                            thumbColor = controllerColor,
+                            activeTrackColor = controllerColor
                         )
                     )
                     Row(
@@ -129,7 +130,7 @@ fun VideoPlayer(
                             Icon(
                                 painter = painterResource(if (state.isPlaying) R.drawable.ic_pause_filled else R.drawable.ic_play_filled),
                                 contentDescription = null,
-                                tint = Color.White.copy(alpha = ContentAlpha.medium)
+                                tint = controllerColor.copy(alpha = ContentAlpha.medium)
                             )
                         }
                         IconButton(
@@ -144,14 +145,14 @@ fun VideoPlayer(
                             Icon(
                                 painter = painterResource(if (state.isMuted) R.drawable.ic_audio_off_outlined else R.drawable.ic_audio_on_outlined),
                                 contentDescription = null,
-                                tint = Color.White.copy(alpha = ContentAlpha.medium)
+                                tint = controllerColor.copy(alpha = ContentAlpha.medium)
                             )
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
                             text = state.formatCurrentProgress,
                             style = MaterialTheme.typography.body2,
-                            color = Color.White.copy(alpha = ContentAlpha.medium),
+                            color = controllerColor.copy(alpha = ContentAlpha.medium),
                             modifier = Modifier.padding(end = 16.dp)
                         )
                     }
@@ -250,7 +251,7 @@ class VideoPlayerState(
 }
 
 @Composable
-fun rememberExoPlayerState(
+fun rememberVideoPlayerState(
     lifecycleAware: Boolean = true,
     updatePlaybackStateInterval: Duration = 300.milliseconds
 ): VideoPlayerState {
