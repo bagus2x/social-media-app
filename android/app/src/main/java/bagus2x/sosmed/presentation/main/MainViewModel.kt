@@ -12,40 +12,38 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainViewModel @Inject constructor(
     getAuthUseCase: GetAuthUseCase,
     getUserUseCase: GetUserUseCase,
     networkTracker: NetworkTracker
 ) : ViewModel() {
-    val auth = getAuthUseCase()
+    private val auth = getAuthUseCase()
+        .map { auth ->
+            if (auth != null) {
+                AuthState.Authenticated(auth)
+            } else {
+                AuthState.Unauthenticated
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = AuthState.Loading
+        )
+    private val authUser = auth
+        .filterIsInstance<AuthState.Authenticated>()
+        .flatMapLatest { getUserUseCase(userId = it.auth.profile.id) }
+    private val networkState = networkTracker.flow
+    val state = combine(auth, authUser, networkState) { authState, authUser, networkState ->
+        MainState(authState, authUser, networkState)
+    }
         .catch { e ->
             Timber.e(e)
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = null
-        )
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val authUser = auth
-        .filterNotNull()
-        .flatMapLatest {
-            getUserUseCase(userId = it.profile.id)
-        }
-        .catch { e ->
-            Timber.e(e)
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = null
-        )
-
-    val networkStatus = networkTracker.flow
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = NetworkTracker.Init
+            initialValue = MainState()
         )
 }
