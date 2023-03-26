@@ -1,5 +1,6 @@
 package bagus2x.sosmed.presentation.auth.signup
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -16,7 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bagus2x.sosmed.R
 import bagus2x.sosmed.presentation.auth.SignInScreen
+import bagus2x.sosmed.presentation.auth.SignUpScreen
 import bagus2x.sosmed.presentation.common.LocalShowSnackbar
+import bagus2x.sosmed.presentation.common.components.Image
+import bagus2x.sosmed.presentation.common.components.TextField
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -34,7 +38,14 @@ fun SignUpScreen(
         setPassword = viewModel::setPassword,
         signIn = viewModel::signIn,
         navigateToSignInScreen = {
-            navController.navigate(SignInScreen())
+            navController.navigate(SignInScreen()) {
+                popUpTo(SignUpScreen()) {
+                    inclusive = true
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
         },
         navigateUp = navController::navigateUp
     )
@@ -66,14 +77,27 @@ fun SignUpScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(32.dp),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(
+                32.dp,
+                alignment = Alignment.CenterVertically
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Image(
+                model = R.drawable.ilustration_hello,
+                contentDescription = null,
+                modifier = Modifier.width(200.dp)
+            )
             TextField(
                 value = state.username,
                 onValueChange = setUsername,
@@ -86,7 +110,6 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next
                 ),
             )
-            Spacer(modifier = Modifier.height(32.dp))
             TextField(
                 value = state.email,
                 onValueChange = setEmail,
@@ -99,7 +122,6 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next
                 ),
             )
-            Spacer(modifier = Modifier.height(32.dp))
             TextField(
                 value = state.password,
                 onValueChange = setPassword,
@@ -113,24 +135,23 @@ fun SignUpScreen(
                 ),
                 keyboardActions = KeyboardActions(onSend = { signIn() })
             )
-            Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = signIn,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !state.loading && state.isFilled
             ) {
-                Text(text = stringResource(R.string.text_sign_in))
+                Text(text = stringResource(R.string.text_sign_up))
             }
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Already have an account?",
+                    text = stringResource(R.string.text_already_have_an_account),
                     style = MaterialTheme.typography.button
                 )
                 TextButton(onClick = navigateToSignInScreen) {
-                    Text(text = "Sign In")
+                    Text(text = stringResource(R.string.text_sign_up))
                 }
             }
         }
