@@ -8,6 +8,7 @@ object AppColor {
     val LightBlue700 = Color(0XFF0288D1)
     val Purple500 = Color(0xFF9C27B0)
     val Pink500 = Color(0XFFE91E63)
+    val Pink700 = Color(0xFFC2185B)
     val Green500 = Color(0XFF4CAF50)
     val Yellow500 = Color(0XFFFFEB3B)
     val Red500 = Color(0XFFF44336)
