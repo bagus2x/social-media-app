@@ -63,6 +63,9 @@
     <string name="text_media">Media</string>
     <string name="text_favorites">Favorites</string>
     <string name="text_users">Users</string>
+    <string name="text_sign_up">Sign Up</string>
+    <string name="text_already_have_an_account">Already have an account?</string>
+    <string name="text_dont_have_an_account">Don\'t have an account?</string>
     <string-array name="text_profile_tab_items">
         <item>@string/text_feeds</item>
         <item>@string/text_comments</item>
