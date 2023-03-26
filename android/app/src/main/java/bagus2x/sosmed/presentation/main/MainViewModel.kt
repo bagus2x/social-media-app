@@ -8,42 +8,68 @@ import bagus2x.sosmed.presentation.common.connectivity.NetworkTracker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainViewModel @Inject constructor(
-    getAuthUseCase: GetAuthUseCase,
-    getUserUseCase: GetUserUseCase,
-    networkTracker: NetworkTracker
+    private val getAuthUseCase: GetAuthUseCase,
+    private val getUserUseCase: GetUserUseCase,
+    private val networkTracker: NetworkTracker
 ) : ViewModel() {
-    private val auth = getAuthUseCase()
-        .map { auth ->
-            if (auth != null) {
-                AuthState.Authenticated(auth)
-            } else {
-                AuthState.Unauthenticated
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = AuthState.Loading
-        )
-    private val authUser = auth
-        .filterIsInstance<AuthState.Authenticated>()
-        .flatMapLatest { getUserUseCase(userId = it.auth.profile.id) }
-    private val networkState = networkTracker.flow
-    val state = combine(auth, authUser, networkState) { authState, authUser, networkState ->
-        MainState(authState, authUser, networkState)
+    private val _state = MutableStateFlow(MainState())
+    val state = _state.asStateFlow()
+
+    init {
+        loadAuthState()
+        loadAuthUser()
+        loadNetworkState()
     }
-        .catch { e ->
-            Timber.e(e)
+
+    private fun loadAuthState() {
+        viewModelScope.launch {
+            getAuthUseCase()
+                .catch { e ->
+                    _state.update { state -> state.copy(snackbar = e.message ?: "") }
+                    Timber.e(e)
+                }
+                .collectLatest { auth ->
+                    if (auth != null) {
+                        _state.update { state -> state.copy(authState = AuthState.Authenticated(auth)) }
+                    } else {
+                        _state.update { state -> state.copy(authState = AuthState.Unauthenticated) }
+                    }
+                }
         }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = MainState()
-        )
+    }
+
+    private fun loadAuthUser() {
+        viewModelScope.launch {
+            getAuthUseCase()
+                .filterNotNull()
+                .flatMapLatest { getUserUseCase(userId = it.profile.id) }
+                .catch { e ->
+                    _state.update { state -> state.copy(snackbar = e.message ?: "") }
+                    Timber.e(e)
+                }
+                .collectLatest { user ->
+                    _state.update { state -> state.copy(authUser = user) }
+                }
+        }
+    }
+
+    private fun loadNetworkState() {
+        viewModelScope.launch {
+            networkTracker.flow
+                .catch { e ->
+                    _state.update { state -> state.copy(snackbar = e.message ?: "") }
+                    Timber.e(e)
+                }
+                .collectLatest { networkState ->
+                    _state.update { state -> state.copy(networkState = networkState) }
+                }
+        }
+    }
 }
