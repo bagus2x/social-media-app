@@ -77,18 +77,20 @@ android {
 }
 
 dependencies {
-    val composeUiVersion = "1.4.0"
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
-
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.activity:activity-compose:1.7.0")
+
+    val composeUiVersion = "1.4.0"
+    implementation("androidx.compose.animation:animation:$composeUiVersion")
+    implementation("androidx.compose.foundation:foundation:$composeUiVersion")
+    implementation("androidx.compose.material:material:$composeUiVersion")
+    implementation("androidx.compose.runtime:runtime:$composeUiVersion")
     implementation("androidx.compose.ui:ui:$composeUiVersion")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.0")
-    implementation("androidx.compose.material:material:1.5.0-alpha01")
+    implementation("androidx.compose.ui:ui-util:$composeUiVersion")
     implementation("androidx.compose.ui:ui-text-google-fonts:$composeUiVersion")
 
     val lifecycleVersion = "2.6.0"
@@ -97,8 +99,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-service:$lifecycleVersion")
 
     implementation("androidx.browser:browser:1.5.0")
-
-    implementation("androidx.compose.ui:ui-util:$composeUiVersion")
 
     val navVersion = "2.5.3"
     implementation("androidx.navigation:navigation-compose:$navVersion")
@@ -124,27 +124,31 @@ dependencies {
     implementation("androidx.paging:paging-runtime:$pagingVersion")
     implementation("androidx.paging:paging-compose:1.0.0-alpha18")
 
-    implementation("io.coil-kt:coil-compose:2.2.2")
-    implementation("io.coil-kt:coil-video:2.2.2")
+    val coilVersion = "2.2.2"
+    implementation("io.coil-kt:coil-compose:$coilVersion")
+    implementation("io.coil-kt:coil-video:$coilVersion")
 
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha09")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha08")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
-    // Exo Player
-    implementation("androidx.media3:media3-exoplayer:1.0.0")
-    implementation("androidx.media3:media3-ui:1.0.0")
+    // Media3
+    val media3 = "1.0.0"
+    implementation("androidx.media3:media3-exoplayer:$media3")
+    implementation("androidx.media3:media3-ui:$media3")
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-permissions:0.29.2-rc")
-    implementation("com.google.accompanist:accompanist-navigation-material:0.29.2-rc")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.29.2-rc")
-    implementation("com.google.accompanist:accompanist-placeholder-material:0.29.2-rc")
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.29.2-rc")
+    val accompanistVersion = "0.30.0"
+    implementation("com.google.accompanist:accompanist-permissions:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-navigation-material:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
 
     // Camera X
-    implementation("androidx.camera:camera-camera2:1.2.2")
-    implementation("androidx.camera:camera-lifecycle:1.2.2")
-    implementation("androidx.camera:camera-view:1.2.2")
+    val cameraVersion = "1.2.2"
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
 
     implementation("androidx.palette:palette:1.0.0")
 
@@ -159,11 +163,11 @@ dependencies {
 
     // Ktor
     val ktorVersion = "2.2.4"
-    implementation("io.ktor:ktor-client-core:2.2.4")
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:2.2.4")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("io.ktor:ktor-client-auth:$ktorVersion")
     implementation("io.ktor:ktor-client-websockets:$ktorVersion")
 

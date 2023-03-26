@@ -1,6 +1,11 @@
 buildscript {
+    val kotlinVersion by extra("1.8.10")
     dependencies {
         classpath("com.google.gms:google-services:4.3.15")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    }
+    repositories {
+        mavenCentral()
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
