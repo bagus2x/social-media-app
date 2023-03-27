@@ -8,11 +8,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bagus2x.sosmed.R
@@ -84,6 +88,7 @@ fun SignUpScreen(
     ) {
         Column(
             modifier = Modifier
+                .imePadding()
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(32.dp),
@@ -122,6 +127,7 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next
                 ),
             )
+            var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
             TextField(
                 value = state.password,
                 onValueChange = setPassword,
@@ -133,7 +139,23 @@ fun SignUpScreen(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Send
                 ),
-                keyboardActions = KeyboardActions(onSend = { signIn() })
+                keyboardActions = KeyboardActions(onSend = { signIn() }),
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation,
+                trailingIcon = {
+                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                        if (isPasswordVisible) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_eye_outlined),
+                                contentDescription = null
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_eye_slash_outlined),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
             )
             Button(
                 onClick = signIn,
@@ -151,7 +173,7 @@ fun SignUpScreen(
                     style = MaterialTheme.typography.button
                 )
                 TextButton(onClick = navigateToSignInScreen) {
-                    Text(text = stringResource(R.string.text_sign_up))
+                    Text(text = stringResource(R.string.text_sign_in))
                 }
             }
         }
@@ -160,3 +182,5 @@ fun SignUpScreen(
         }
     }
 }
+
+private val PasswordVisualTransformation = PasswordVisualTransformation()
