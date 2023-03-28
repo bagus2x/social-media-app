@@ -21,8 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bagus2x.sosmed.R
 import bagus2x.sosmed.domain.model.Comment
-import bagus2x.sosmed.domain.model.User
-import bagus2x.sosmed.presentation.common.LocalAuthenticatedUser
+import bagus2x.sosmed.domain.model.Profile
 import bagus2x.sosmed.presentation.common.Misc
 import bagus2x.sosmed.presentation.common.components.Image
 import bagus2x.sosmed.presentation.common.components.TextField
@@ -30,12 +29,12 @@ import bagus2x.sosmed.presentation.common.components.TextField
 @Composable
 fun CommentBox(
     modifier: Modifier = Modifier,
+    profile: Profile?,
     focusRequester: FocusRequester = remember { FocusRequester() },
     description: String,
     setDescription: (String) -> Unit,
     commentToBeReplied: Comment?,
     cancelComment: () -> Unit,
-    authUser: User? = LocalAuthenticatedUser.current,
     loading: Boolean = false,
     onGalleryClicked: () -> Unit,
     onCameraClicked: () -> Unit,
@@ -70,14 +69,14 @@ fun CommentBox(
         }
         Divider()
         Spacer(modifier = Modifier.height(12.dp))
-        if (authUser != null) {
+        if (profile != null) {
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Image(
-                    model = authUser.photo ?: Misc.getAvatar(authUser.username),
+                    model = profile.photo ?: Misc.getAvatar(profile.username),
                     contentDescription = null,
                     modifier = Modifier
                         .size(32.dp)
@@ -107,7 +106,7 @@ fun CommentBox(
                     ),
                     textStyle = MaterialTheme.typography.body2,
                     label = {
-                        Text(text = "Comment as @${authUser.username}")
+                        Text(text = "Comment as @${profile.username}")
                     },
                     contentPadding = PaddingValues(0.dp),
                     minHeight = 0.dp

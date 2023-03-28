@@ -29,6 +29,7 @@ import bagus2x.sosmed.presentation.common.LocalShowSnackbar
 import bagus2x.sosmed.presentation.common.components.Image
 import bagus2x.sosmed.presentation.common.components.TextField
 import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
 
 @Composable
 fun SignInScreen(
@@ -82,6 +83,7 @@ fun SignInScreen(
                 snackbarConsumed()
             }
             if (state.authenticated) {
+                Timber.i("HASIL authenticated nih")
                 navigateUp()
             }
         }

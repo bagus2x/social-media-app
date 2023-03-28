@@ -10,7 +10,9 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -28,7 +30,6 @@ import androidx.paging.compose.items
 import bagus2x.sosmed.R
 import bagus2x.sosmed.domain.model.Feed
 import bagus2x.sosmed.domain.model.User
-import bagus2x.sosmed.presentation.common.LocalAuthenticatedUser
 import bagus2x.sosmed.presentation.common.components.Feed
 import bagus2x.sosmed.presentation.explore.SearchSheet
 import bagus2x.sosmed.presentation.user.EditProfileScreen
@@ -68,10 +69,6 @@ fun ProfileScreen(
             navController.navigate(FollowingScreen(userid = viewModel.userId))
         }
     )
-}
-
-enum class SwipingStates {
-    EXPANDED, COLLAPSED
 }
 
 @OptIn(
@@ -130,16 +127,10 @@ fun ProfileScreen(
                 )
                 .nestedScroll(nestedScrollConnection)
         ) {
-            val computedProgress by remember {
-                derivedStateOf {
-                    if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction
-                    else 1f - swipingState.progress.fraction
-                }
-            }
             if (state.user != null) {
                 ProfileTopBar(
                     user = state.user,
-                    own = LocalAuthenticatedUser.current?.id == state.user.id,
+                    own = state.own,
                     onBackClicked = navigateUp,
                     onSettingClicked = navigateToProfileMenuSheet,
                     onSearchClicked = navigateToSearchSheet,
@@ -149,7 +140,10 @@ fun ProfileScreen(
                     onFollowingClicked = navigateToFollowingScreen,
                     onFollowersClicked = navigateToFollowersScreen,
                     modifier = Modifier.fillMaxWidth(),
-                    progressProvider = { computedProgress },
+                    progressProvider = {
+                        if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction
+                        else 1f - swipingState.progress.fraction
+                    },
                 )
             }
             val pagerState = rememberPagerState()
@@ -237,4 +231,6 @@ fun ProfileScreen(
     }
 }
 
-
+enum class SwipingStates {
+    EXPANDED, COLLAPSED
+}

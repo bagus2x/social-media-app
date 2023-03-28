@@ -24,7 +24,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import bagus2x.sosmed.R
-import bagus2x.sosmed.presentation.common.LocalAuthenticatedUser
 import bagus2x.sosmed.presentation.common.LocalShowSnackbar
 import bagus2x.sosmed.presentation.common.components.LocalProvider
 import bagus2x.sosmed.presentation.common.components.Scaffold
@@ -40,7 +39,9 @@ import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @OptIn(
     ExperimentalMaterialNavigationApi::class,
@@ -69,10 +70,12 @@ fun MainScreen(
             }
         }
         val state by viewModel.state.collectAsStateWithLifecycle()
-        LocalProvider(
-            LocalShowSnackbar provides showSnackbar,
-            LocalAuthenticatedUser provides state.authUser
-        ) {
+        LaunchedEffect(Unit){
+            snapshotFlow { state.authState }.collectLatest {
+                Timber.i("HASIL ${state.authState}")
+            }
+        }
+        LocalProvider(LocalShowSnackbar provides showSnackbar) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 scaffoldState = scaffoldState,
@@ -93,7 +96,7 @@ fun MainScreen(
                     modifier = Modifier.align(Alignment.BottomStart)
                 )
                 NetworkStatus(
-                    state = state.networkState,
+                    stateProvider = { state.networkState },
                     modifier = Modifier.align(Alignment.TopCenter)
                 )
             }
@@ -182,16 +185,12 @@ fun BottomNavigation(
 
 @Composable
 fun NetworkStatus(
-    state: NetworkTracker.State,
+    stateProvider: () -> NetworkTracker.State,
     modifier: Modifier = Modifier
 ) {
-    var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(state) {
-        visible = state == NetworkTracker.Unavailable
-    }
-
+    val state = stateProvider()
     AnimatedVisibility(
-        visible = visible,
+        visible = state == NetworkTracker.Unavailable,
         modifier = modifier,
         enter = slideInVertically { -it * 2 },
         exit = slideOutVertically(animationSpec = tween(delayMillis = 2000)) { -it * 2 }

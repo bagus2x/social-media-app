@@ -21,17 +21,12 @@ android {
         applicationId = "bagus2x.sosmed"
         minSdk = 24
         targetSdk = 33
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
-        }
-        ndk {
-            // Don"t package arm64-v8a or x86_64
-            abiFilters.add("armeabi-v7a")
-            abiFilters.add("x86")
         }
     }
     buildTypes {
@@ -92,6 +87,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:$composeUiVersion")
     implementation("androidx.compose.ui:ui-util:$composeUiVersion")
     implementation("androidx.compose.ui:ui-text-google-fonts:$composeUiVersion")
+    implementation("androidx.compose.ui:ui-tooling-preview:$composeUiVersion")
 
     val lifecycleVersion = "2.6.0"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")

@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +22,6 @@ class CameraViewModel @Inject constructor(
     fun setCapturedUri(uri: Uri?) {
         requireNotNull(uri) { "Uri is not allowed to be null" }
         viewModelScope.launch {
-            Timber.i("HASIL ${deviceMediaManager.getImageOrVideo(uri)}")
             _capturedDeviceMedia.update { deviceMediaManager.getImageOrVideo(uri) }
         }
     }

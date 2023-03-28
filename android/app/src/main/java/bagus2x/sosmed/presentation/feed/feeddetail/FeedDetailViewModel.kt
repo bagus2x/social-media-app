@@ -20,8 +20,9 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getFeedUseCase: GetFeedUseCase,
     getRootCommentsUseCase: GetRootCommentsUseCase,
+    private val getFeedUseCase: GetFeedUseCase,
+    private val getUserUseCase: GetUserUseCase,
     private val createCommentUseCase: CreateCommentUseCase,
     private val loadRepliesUseCase: LoadRepliesUseCase,
     private val favoriteFeedUseCase: FavoriteFeedUseCase,
@@ -45,6 +46,11 @@ class FeedDetailViewModel @Inject constructor(
         )
 
     init {
+        loadFeed()
+        loadProfile()
+    }
+
+    private fun loadFeed() {
         viewModelScope.launch {
             getFeedUseCase(feedId)
                 .catch { e ->
@@ -55,6 +61,39 @@ class FeedDetailViewModel @Inject constructor(
                     _state.update { state ->
                         state.copy(
                             feedState = state.feedState.copy(feed = feed)
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun loadProfile() {
+        viewModelScope.launch {
+            getUserUseCase()
+                .onStart {
+                    _state.update { state ->
+                        state.copy(
+                            profileState = state.profileState.copy(loading = true)
+                        )
+                    }
+                }
+                .filterNotNull()
+                .catch { e ->
+                    _state.update { state ->
+                        state.copy(
+                            profileState = state.profileState.copy(loading = false),
+                            snackbar = e.message ?: "Failed to load user"
+                        )
+                    }
+                    Timber.e(e)
+                }
+                .collectLatest { user ->
+                    _state.update { state ->
+                        state.copy(
+                            profileState = state.profileState.copy(
+                                profile = user.asProfile(),
+                                loading = false
+                            )
                         )
                     }
                 }

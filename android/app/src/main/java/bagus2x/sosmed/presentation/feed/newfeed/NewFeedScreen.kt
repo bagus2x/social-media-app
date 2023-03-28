@@ -31,7 +31,6 @@ import androidx.navigation.NavController
 import bagus2x.sosmed.R
 import bagus2x.sosmed.presentation.camera.launchCamera
 import bagus2x.sosmed.presentation.camera.rememberCameraLauncher
-import bagus2x.sosmed.presentation.common.LocalAuthenticatedUser
 import bagus2x.sosmed.presentation.common.LocalShowSnackbar
 import bagus2x.sosmed.presentation.common.Misc
 import bagus2x.sosmed.presentation.common.components.Image
@@ -53,7 +52,7 @@ fun NewFeedScreen(
     val gallery = rememberLauncherForActivityResult(
         contract = SelectMultipleMedia(
             max = 4,
-            selected = state.selectedMedias
+            selected = state.feedState.selectedMedias
         ),
         onResult = { deviceMedias ->
             viewModel.setSelectedMedia(deviceMedias ?: return@rememberLauncherForActivityResult)
@@ -129,13 +128,13 @@ fun NewFeedScreen(
                 showSnackbar(state.snackbar)
                 snackbarConsumed()
             }
-            if (state.created) {
+            if (state.feedState.created) {
                 navigateUp()
             }
         }
     }
 
-    val (description, medias, selectedMedias, loading) = stateProvider()
+    val state = stateProvider()
     Scaffold(
         modifier = Modifier
             .systemBarsPadding()
@@ -144,15 +143,15 @@ fun NewFeedScreen(
             NewFeedTopBar(
                 onBackClicked = navigateUp,
                 onPostClicked = create,
-                buttonEnabled = !loading
+                buttonEnabled = !state.feedState.loading
             )
         },
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (profileRef, visibilityRef, descriptionRef, selectedMediasRef, simpleGalleryRef, actionBarRef) = createRefs()
-            val auth = LocalAuthenticatedUser.current
             Image(
-                model = auth?.photo ?: Misc.getAvatar("bagus"),
+                model = state.profileState.profile?.photo
+                    ?: state.profileState.profile?.username?.let(Misc::getAvatar),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -175,7 +174,7 @@ fun NewFeedScreen(
                 Text(text = stringResource(R.string.text_public))
             }
             DescriptionTextField(
-                text = description,
+                text = state.feedState.description,
                 onChange = setDescription,
                 modifier = Modifier
                     .constrainAs(descriptionRef) {
@@ -184,7 +183,7 @@ fun NewFeedScreen(
                         end.linkTo(parent.end)
                         width = Dimension.matchParent
                     },
-                enabled = !loading
+                enabled = !state.feedState.loading
             )
             SelectedMedias(
                 modifier = Modifier
@@ -194,12 +193,12 @@ fun NewFeedScreen(
                         end.linkTo(parent.end)
                         width = Dimension.matchParent
                     },
-                medias = selectedMedias,
+                medias = state.feedState.selectedMedias,
                 onCloseClicked = unselectDeviceMedia,
                 onItemClicked = navigateToEditorScreen
             )
             AnimatedVisibility(
-                visible = description.isEmpty() && selectedMedias.isEmpty() && medias.isNotEmpty(),
+                visible = state.feedState.description.isEmpty() && state.feedState.selectedMedias.isEmpty() && state.feedState.medias.isNotEmpty(),
                 enter = slideInVertically(initialOffsetY = { it / 2 }),
                 exit = slideOutVertically(targetOffsetY = { it }),
                 modifier = Modifier.constrainAs(simpleGalleryRef) {
@@ -213,11 +212,11 @@ fun NewFeedScreen(
                     onCameraClicked = navigateToCameraScreen,
                     onGalleryClicked = navigateToGalleryScreen,
                     onItemClicked = selectDeviceMedia,
-                    options = medias
+                    options = state.feedState.medias
                 )
             }
             MediaActionBar(
-                textLength = description.length,
+                textLength = state.feedState.description.length,
                 modifier = Modifier
                     .imePadding()
                     .constrainAs(actionBarRef) {
@@ -231,7 +230,7 @@ fun NewFeedScreen(
                 onLocationClicked = { }
             )
         }
-        if (loading) {
+        if (state.feedState.loading || state.profileState.loading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }

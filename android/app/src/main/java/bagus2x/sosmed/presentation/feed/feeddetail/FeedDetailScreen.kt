@@ -97,6 +97,7 @@ fun FeedDetailScreen(
         },
         bottomBar = {
             CommentBox(
+                profile = state.profileState.profile,
                 description = state.commentState.description,
                 setDescription = setDescription,
                 commentToBeReplied = state.commentState.commentToBeReplied,

@@ -30,10 +30,6 @@ class TranslationState(
             is Translated -> "See original"
         }
     }
-    private val l by derivedStateOf {
-        Timber.i("HASIL text $text")
-        text
-    }
 
     private fun translate() {
         scope.launch {
@@ -77,7 +73,7 @@ class TranslationState(
     data class Translated(override val value: String) : Text(value)
 }
 
-fun saver(translator: Translator, scope: CoroutineScope) = mapSaver<TranslationState>(
+fun saver(translator: Translator, scope: CoroutineScope) = mapSaver(
     save = {
         mapOf(
             "source_text" to it.sourceText,

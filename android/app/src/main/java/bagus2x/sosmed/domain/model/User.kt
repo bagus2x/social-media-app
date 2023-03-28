@@ -19,4 +19,14 @@ data class User(
     val following: Boolean,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
-)
+) {
+
+    fun asProfile(): Profile {
+        return Profile(
+            id = id,
+            photo = photo,
+            username = username,
+            name = name
+        )
+    }
+}

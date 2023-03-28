@@ -149,7 +149,8 @@ fun CommentScreen(
                 onSendClicked = sendComment,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .imePadding()
+                    .imePadding(),
+                profile = null
             )
         }
     }

@@ -14,7 +14,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import bagus2x.sosmed.domain.model.Message
-import bagus2x.sosmed.presentation.common.LocalAuthenticatedUser
 import bagus2x.sosmed.presentation.common.LocalShowSnackbar
 import bagus2x.sosmed.presentation.common.components.Scaffold
 import bagus2x.sosmed.presentation.conversation.ChatDetailScreen
@@ -82,6 +81,7 @@ fun MessagesScreen(
         bottomBar = {
             MessageBox(
                 description = state.messageState.description,
+                profile = state.profileState.profile,
                 onDescriptionChange = setDescription,
                 onGalleryClicked = { },
                 onCameraClicked = { },
@@ -93,12 +93,11 @@ fun MessagesScreen(
             )
         }
     ) {
-        val authUser = LocalAuthenticatedUser.current
         LaunchedEffect(Unit) {
             snapshotFlow {
                 if (messages.itemCount > 0) {
                     val message = messages[0]
-                    if (message != null && message.sender.id == authUser?.id) message
+                    if (message != null && message.sender.id == state.profileState.profile?.id) message
                     else null
                 } else {
                     null
@@ -124,7 +123,7 @@ fun MessagesScreen(
                 key = { _, message -> message.id }
             ) { index, message ->
                 if (message != null) {
-                    val own = message.sender.id == authUser?.id
+                    val own = message.sender.id == state.profileState.profile?.id
                     Message(
                         message = message,
                         own = own,

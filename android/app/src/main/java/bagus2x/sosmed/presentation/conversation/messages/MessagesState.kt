@@ -1,6 +1,7 @@
 package bagus2x.sosmed.presentation.conversation.messages
 
 import bagus2x.sosmed.domain.model.Chat
+import bagus2x.sosmed.domain.model.Profile
 import bagus2x.sosmed.presentation.common.media.DeviceMedia
 
 data class ChatState(
@@ -17,8 +18,14 @@ data class MessageState(
         get() = description.isNotBlank() || medias.isNotEmpty()
 }
 
+data class ProfileState(
+    val profile: Profile? = null,
+    val loading: Boolean = false
+)
+
 data class MessagesState(
     val chatState: ChatState = ChatState(),
     val messageState: MessageState = MessageState(),
+    val profileState: ProfileState = ProfileState(),
     val snackbar: String = ""
 )

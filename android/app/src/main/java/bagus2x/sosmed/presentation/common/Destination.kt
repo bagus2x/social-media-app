@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.*
@@ -15,6 +17,8 @@ import bagus2x.sosmed.presentation.auth.SignInScreen
 import bagus2x.sosmed.presentation.main.AuthState
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import com.google.accompanist.navigation.material.bottomSheet as bottomSheetComposable
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -73,17 +77,21 @@ abstract class Destination constructor(
             arguments = this@Destination.arguments,
             deepLinks = this@Destination.deepLinks,
         ) {
+            LaunchedEffect(Unit) {
+                snapshotFlow { authStateProvider() }.distinctUntilChanged().collectLatest { state ->
+                    if (state is AuthState.Unauthenticated) {
+                        navHostController.navigate(SignInScreen())
+                    }
+                }
+            }
             when (authStateProvider()) {
-                AuthState.Loading -> {
+                is AuthState.Authenticated -> {
+                    screen(it, navHostController)
+                }
+                else -> {
                     Box(modifier = Modifier.fillMaxSize()) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
-                }
-                AuthState.Unauthenticated -> {
-                    navHostController.navigate(SignInScreen())
-                }
-                is AuthState.Authenticated -> {
-                    screen(it, navHostController)
                 }
             }
         }

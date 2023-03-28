@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import bagus2x.sosmed.domain.model.Media
 import bagus2x.sosmed.domain.usecase.GetChatUseCase
+import bagus2x.sosmed.domain.usecase.GetUserUseCase
 import bagus2x.sosmed.domain.usecase.ObserveMessagesUseCase
 import bagus2x.sosmed.domain.usecase.SendMessageUseCase
 import bagus2x.sosmed.presentation.common.connectivity.NetworkTracker
@@ -24,6 +25,7 @@ class MessagesViewModel @Inject constructor(
     private val observeMessagesUseCase: ObserveMessagesUseCase,
     private val getChatUseCase: GetChatUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
+    private val getUserUseCase: GetUserUseCase,
     private val fileUploader: FileUploader,
     private val networkTracker: NetworkTracker
 ) : ViewModel() {
@@ -47,6 +49,7 @@ class MessagesViewModel @Inject constructor(
 
     init {
         loadChat()
+        loadProfile()
         connectChat()
     }
 
@@ -75,6 +78,39 @@ class MessagesViewModel @Inject constructor(
                         state.copy(
                             chatState = state.chatState.copy(
                                 chat = chat,
+                                loading = false
+                            )
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun loadProfile() {
+        viewModelScope.launch {
+            getUserUseCase()
+                .onStart {
+                    _state.update { state ->
+                        state.copy(
+                            profileState = state.profileState.copy(loading = true)
+                        )
+                    }
+                }
+                .filterNotNull()
+                .catch { e ->
+                    _state.update { state ->
+                        state.copy(
+                            profileState = state.profileState.copy(loading = false),
+                            snackbar = e.message ?: "Failed to load user"
+                        )
+                    }
+                    Timber.e(e)
+                }
+                .collectLatest { user ->
+                    _state.update { state ->
+                        state.copy(
+                            profileState = state.profileState.copy(
+                                profile = user.asProfile(),
                                 loading = false
                             )
                         )

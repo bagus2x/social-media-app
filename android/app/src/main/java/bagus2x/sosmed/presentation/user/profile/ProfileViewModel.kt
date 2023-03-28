@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import bagus2x.sosmed.domain.model.User
 import bagus2x.sosmed.domain.usecase.FollowUserUseCase
+import bagus2x.sosmed.domain.usecase.GetAuthUseCase
 import bagus2x.sosmed.domain.usecase.GetFeedsUseCase
 import bagus2x.sosmed.domain.usecase.GetUserUseCase
 import bagus2x.sosmed.presentation.user.ProfileScreen
@@ -21,6 +22,7 @@ class ProfileViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getFeedsUseCase: GetFeedsUseCase,
     private val getUserUseCase: GetUserUseCase,
+    private val getAuthUseCase: GetAuthUseCase,
     private val followUserUseCase: FollowUserUseCase,
 ) : ViewModel() {
     val userId = ProfileScreen.getUserId(savedStateHandle)
@@ -45,9 +47,17 @@ class ProfileViewModel @Inject constructor(
     private fun loadUser() {
         viewModelScope.launch {
             try {
-                getUserUseCase(userId).filterNotNull().collectLatest { user ->
-                    _state.update { state -> state.copy(user = user) }
-                }
+                getUserUseCase(userId)
+                    .filterNotNull()
+                    .combine(getAuthUseCase().filterNotNull()) { user, auth -> user to auth }
+                    .collectLatest { (user, auth) ->
+                        _state.update { state ->
+                            state.copy(
+                                user = user,
+                                own = user.id == auth.profile.id
+                            )
+                        }
+                    }
             } catch (e: Exception) {
                 _state.update { state -> state.copy(snackbar = e.message ?: "Failed to load user") }
             }
