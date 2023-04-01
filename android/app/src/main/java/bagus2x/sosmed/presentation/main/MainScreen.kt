@@ -39,9 +39,7 @@ import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(
     ExperimentalMaterialNavigationApi::class,
@@ -70,11 +68,6 @@ fun MainScreen(
             }
         }
         val state by viewModel.state.collectAsStateWithLifecycle()
-        LaunchedEffect(Unit){
-            snapshotFlow { state.authState }.collectLatest {
-                Timber.i("HASIL ${state.authState}")
-            }
-        }
         LocalProvider(LocalShowSnackbar provides showSnackbar) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
