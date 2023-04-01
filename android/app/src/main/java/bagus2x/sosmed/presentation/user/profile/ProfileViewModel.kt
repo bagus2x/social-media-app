@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import bagus2x.sosmed.domain.model.Auth
 import bagus2x.sosmed.domain.model.User
 import bagus2x.sosmed.domain.usecase.FollowUserUseCase
 import bagus2x.sosmed.domain.usecase.GetAuthUseCase
@@ -12,12 +13,14 @@ import bagus2x.sosmed.domain.usecase.GetFeedsUseCase
 import bagus2x.sosmed.domain.usecase.GetUserUseCase
 import bagus2x.sosmed.presentation.user.ProfileScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getFeedsUseCase: GetFeedsUseCase,
@@ -47,14 +50,18 @@ class ProfileViewModel @Inject constructor(
     private fun loadUser() {
         viewModelScope.launch {
             try {
-                getUserUseCase(userId)
-                    .filterNotNull()
-                    .combine(getAuthUseCase().filterNotNull()) { user, auth -> user to auth }
-                    .collectLatest { (user, auth) ->
+                getAuthUseCase()
+                    .flatMapLatest<Auth?, Pair<User?, Auth?>> { auth ->
+                        if (auth != null) {
+                            getUserUseCase(userId = userId).map { it to auth }
+                        } else {
+                            flow { emit(null to null) }
+                        }
+                    }.collectLatest { (user, auth) ->
                         _state.update { state ->
                             state.copy(
                                 user = user,
-                                own = user.id == auth.profile.id
+                                own = user?.id == auth?.profile?.id
                             )
                         }
                     }
