@@ -97,7 +97,7 @@ fun MessagesScreen(
             snapshotFlow {
                 if (messages.itemCount > 0) {
                     val message = messages[0]
-                    if (message != null && message.sender.id == state.profileState.profile?.id) message
+                    if (message != null && message.sender.id == stateProvider().profileState.profile?.id) message
                     else null
                 } else {
                     null
