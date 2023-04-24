@@ -7,7 +7,7 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import bagus2x.sosmed.data.local.*
 import bagus2x.sosmed.data.local.entity.CommentEntity
-import bagus2x.sosmed.data.local.KeyEntity
+import bagus2x.sosmed.data.local.entity.KeyEntity
 import bagus2x.sosmed.data.remote.CommentRemoteDataSource
 import coil.network.HttpException
 import java.io.IOException

@@ -5,27 +5,27 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import bagus2x.sosmed.data.local.ChatLocalDataSource
-import bagus2x.sosmed.data.local.KeyLocalDataSource
-import bagus2x.sosmed.data.local.SosmedDatabase
-import bagus2x.sosmed.data.local.entity.ChatEntity
 import bagus2x.sosmed.data.local.entity.KeyEntity
-import bagus2x.sosmed.data.remote.ChatRemoteDataSource
+import bagus2x.sosmed.data.local.KeyLocalDataSource
+import bagus2x.sosmed.data.local.NotificationLocalDataSource
+import bagus2x.sosmed.data.local.SosmedDatabase
+import bagus2x.sosmed.data.local.entity.NotificationEntity
+import bagus2x.sosmed.data.remote.NotificationRemoteDataSource
 import coil.network.HttpException
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
-class ChatRemoteMediator(
+class NotificationRemoteMediator(
     private val keyLocalDataSource: KeyLocalDataSource,
-    private val chatLocalDataSource: ChatLocalDataSource,
-    private val chatRemoteDataSource: ChatRemoteDataSource,
+    private val notificationLocalDataSource: NotificationLocalDataSource,
+    private val notificationRemoteDataSource: NotificationRemoteDataSource,
     private val label: String,
     private val database: SosmedDatabase
-) : RemoteMediator<Int, ChatEntity>() {
+) : RemoteMediator<Int, NotificationEntity>() {
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, ChatEntity>
+        state: PagingState<Int, NotificationEntity>
     ): MediatorResult {
         return try {
             // The network load method takes an optional String
@@ -66,7 +66,7 @@ class ChatRemoteMediator(
             // be wrapped in a withContext(Dispatcher.IO) { ... } block
             // since Retrofit's Coroutine CallAdapter dispatches on a
             // worker thread.
-            val res = chatRemoteDataSource.getChats(
+            val res = notificationRemoteDataSource.getNotifications(
                 nextId = nextKey,
                 limit = state.config.pageSize
             )
@@ -76,25 +76,25 @@ class ChatRemoteMediator(
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     keyLocalDataSource.deleteByLabel(label = label)
-                    chatLocalDataSource.deleteAllChats()
+                    notificationLocalDataSource.deleteNotifications()
                 }
 
                 // Update RemoteKey for this query.
                 keyLocalDataSource.insertOrReplace(
                     KeyEntity(
                         label = label,
-                        nextKey = res.lastOrNull()?.asEntity()?.lastMessageSentAt
+                        nextKey = res.lastOrNull()?.id
                     )
                 )
 
                 // Insert new users into database, which invalidates the
                 // current PagingData, allowing Paging to present the updates
                 // in the DB.
-                chatLocalDataSource.save(res.map { it.asEntity() })
+                notificationLocalDataSource.save(res.map { it.asEntity() })
             }
 
             MediatorResult.Success(
-                endOfPaginationReached = res.lastOrNull()?.asEntity()?.id == null
+                endOfPaginationReached = res.lastOrNull()?.id == null
             )
         } catch (e: IOException) {
             MediatorResult.Error(e)

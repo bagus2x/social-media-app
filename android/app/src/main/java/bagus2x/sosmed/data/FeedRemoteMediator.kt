@@ -9,7 +9,7 @@ import bagus2x.sosmed.data.local.FeedLocalDataSource
 import bagus2x.sosmed.data.local.KeyLocalDataSource
 import bagus2x.sosmed.data.local.SosmedDatabase
 import bagus2x.sosmed.data.local.entity.FeedEntity
-import bagus2x.sosmed.data.local.KeyEntity
+import bagus2x.sosmed.data.local.entity.KeyEntity
 import bagus2x.sosmed.data.remote.FeedRemoteDataSource
 import coil.network.HttpException
 import java.io.IOException

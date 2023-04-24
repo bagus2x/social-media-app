@@ -1,4 +1,4 @@
-package bagus2x.sosmed.data.local
+package bagus2x.sosmed.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
