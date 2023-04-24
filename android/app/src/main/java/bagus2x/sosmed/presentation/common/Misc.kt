@@ -1,10 +1,11 @@
 package bagus2x.sosmed.presentation.common
 
 import android.text.format.DateUtils
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import kotlin.time.Duration
 
 object Misc {
@@ -24,6 +25,10 @@ object Misc {
     }
 
     fun formatDate(date: LocalDateTime): String {
+        return DateFormatter.format(date)
+    }
+
+    fun formatDate(date: LocalDate): String {
         return DateFormatter.format(date)
     }
 
