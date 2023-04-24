@@ -1,7 +1,8 @@
-@file:Suppress("UnstableApiUsage")
+import java.util.Properties
 
-val httpBaseUrl: String by project
-val wsBaseUrl: String by project
+val properties = Properties().apply {
+    load(file("$rootDir/constants.properties").reader())
+}
 
 plugins {
     id("com.android.application")
@@ -9,7 +10,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
     id("com.google.gms.google-services")
 }
 
@@ -21,8 +22,8 @@ android {
         applicationId = "bagus2x.sosmed"
         minSdk = 24
         targetSdk = 33
-        versionCode = 2
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,6 +31,8 @@ android {
         }
     }
     buildTypes {
+        val httpBaseUrl = properties["http.base.url"]
+        val wsBaseUrl = properties["ws.base.url"]
         named("debug") {
             buildConfigField("String", "HTTP_BASE_URL", """"$httpBaseUrl"""")
             buildConfigField("String", "WS_BASE_URL", """"$wsBaseUrl"""")
@@ -41,6 +44,7 @@ android {
             isShrinkResources = true
             setProguardFiles(
                 listOf(
+                    @Suppress("UnstableApiUsage")
                     getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
                 )
             )
@@ -58,13 +62,14 @@ android {
             "-opt-in=kotlin.RequiresOptIn"
         )
     }
+    @Suppress("UnstableApiUsage")
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/*"
         }
@@ -76,10 +81,10 @@ dependencies {
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.activity:activity-compose:1.7.0")
+    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.activity:activity-compose:1.7.1")
 
-    val composeUiVersion = "1.4.0"
+    val composeUiVersion = "1.4.2"
     implementation("androidx.compose.animation:animation:$composeUiVersion")
     implementation("androidx.compose.foundation:foundation:$composeUiVersion")
     implementation("androidx.compose.material:material:$composeUiVersion")
@@ -89,7 +94,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts:$composeUiVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeUiVersion")
 
-    val lifecycleVersion = "2.6.0"
+    val lifecycleVersion = "2.6.1"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-service:$lifecycleVersion")
@@ -108,7 +113,7 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Room
-    val roomVersion = "2.5.0"
+    val roomVersion = "2.5.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
@@ -125,10 +130,9 @@ dependencies {
     implementation("io.coil-kt:coil-video:$coilVersion")
 
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha08")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
     // Media3
-    val media3 = "1.0.0"
+    val media3 = "1.0.1"
     implementation("androidx.media3:media3-exoplayer:$media3")
     implementation("androidx.media3:media3-ui:$media3")
 
@@ -151,14 +155,12 @@ dependencies {
     implementation("com.google.mlkit:translate:17.0.1")
     implementation("com.google.mlkit:language-id:17.0.4")
 
-    implementation("com.github.SmartToolFactory:Compose-Cropper:0.2.4")
-
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Ktor
-    val ktorVersion = "2.2.4"
+    val ktorVersion = "2.3.0"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
@@ -185,4 +187,10 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:$composeUiVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeUiVersion")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.10")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs>().configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
