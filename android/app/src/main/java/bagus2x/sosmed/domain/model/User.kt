@@ -1,5 +1,6 @@
 package bagus2x.sosmed.domain.model
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class User(
@@ -13,7 +14,7 @@ data class User(
     val location: String?,
     val website: String?,
     val verified: Boolean,
-    val dateOfBirth: String?,
+    val dateOfBirth: LocalDate?,
     val totalFollowers: Int,
     val totalFollowing: Int,
     val following: Boolean,

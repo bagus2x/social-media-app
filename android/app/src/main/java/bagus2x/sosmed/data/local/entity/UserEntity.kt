@@ -7,6 +7,7 @@ import bagus2x.sosmed.domain.model.User
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 
 @Serializable
@@ -90,7 +91,7 @@ fun UserEntity.asDomainModel(): User {
         location = location,
         website = website,
         verified = verified,
-        dateOfBirth = dateOfBirth,
+        dateOfBirth = dateOfBirth?.let(LocalDate::parse),
         totalFollowers = totalFollowers,
         totalFollowing = totalFollowing,
         following = following,
