@@ -27,6 +27,9 @@ import (
 	messageHandler "sosmed-go-backend/message/handler"
 	messageRepo "sosmed-go-backend/message/repository"
 	messageSvc "sosmed-go-backend/message/service"
+	notificationHandler "sosmed-go-backend/notification/handler"
+	notificationRepo "sosmed-go-backend/notification/repository"
+	notificationSvc "sosmed-go-backend/notification/service"
 	tagHandler "sosmed-go-backend/tag/handler"
 	tagRepo "sosmed-go-backend/tag/repository"
 	tagSvc "sosmed-go-backend/tag/service"
@@ -92,13 +95,20 @@ func run() {
 	memberRepository := chatRepo.NewMemberRepository(db)
 	messageRepository := messageRepo.NewMessageRepository(db)
 	tagRepository := tagRepo.NewTagRepository(db)
+	notificationRepository := notificationRepo.NewNotificationRepository(db)
 
-	authManager := authSvc.NewAuthManager(time.Hour*24*365, "jhahahahahahah", time.Hour*24*365, "jhahahahahahah")
-	userService := userSvc.NewUserService(userRepository, followedUserRepository)
+	authManager := authSvc.NewAuthManager(time.Duration(
+		appConfig.AccessTokenLifeTimeMinutes)*time.Minute,
+		appConfig.AccessTokenKey,
+		time.Duration(appConfig.RefreshTokenLifeTimeMinutes)*time.Minute,
+		appConfig.RefreshTokenKey,
+	)
+	notificationService := notificationSvc.NewNotificationService(notificationRepository, feedRepository, commentRepository)
+	userService := userSvc.NewUserService(userRepository, followedUserRepository, notificationService)
 	authService := authSvc.NewAuthService(userRepository, authManager)
 	uploaderService := uploaderSvc.NewUploaderService(uploaderRepository)
-	feedService := feedSvc.NewFeedService(feedRepository, followedUserRepository, favoriteFeedRepository, tagRepository)
-	commentService := commentSvc.NewCommentService(commentRepository, feedRepository)
+	feedService := feedSvc.NewFeedService(feedRepository, followedUserRepository, favoriteFeedRepository, tagRepository, notificationService)
+	commentService := commentSvc.NewCommentService(commentRepository, feedRepository, notificationService)
 	chatService := chatSvc.NewChatService(chatRepository, memberRepository, messageRepository, userRepository)
 	messageService := messageSvc.NewMessageRepository(messageRepository, chatRepository)
 	messagingService := messagingSvc.NewMessagingService(firebaseClient, userRepository, memberRepository, chatService)
@@ -114,6 +124,7 @@ func run() {
 	chatHandler.NewChatHandler(fiberApp, authMiddleware, chatService, messagingService)
 	messageHandler.NewMessageHandler(fiberApp, authMiddleware, messageService, chatService, userService, messagingService)
 	tagHandler.NewTagService(fiberApp, tagService)
+	notificationHandler.NewNotificationHandler(fiberApp, authMiddleware, notificationService)
 
 	logrus.Fatal(fiberApp.Listen(fmt.Sprintf(":%d", appConfig.Port)))
 }
