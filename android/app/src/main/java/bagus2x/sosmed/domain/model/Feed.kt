@@ -14,12 +14,4 @@ data class Feed(
     val language: String?,
     val updatedAt: LocalDateTime,
     val createdAt: LocalDateTime
-) {
-
-    data class Author(
-        val id: Long,
-        val photo: String?,
-        val username: String,
-        val name: String?
-    )
-}
+)
