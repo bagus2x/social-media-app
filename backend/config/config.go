@@ -9,16 +9,20 @@ import (
 )
 
 type AppConfig struct {
-	Port                int    `mapstructure:"PORT"`
-	DbUsername          string `mapstructure:"DB_USERNAME"`
-	DbPassword          string `mapstructure:"DB_PASSWORD"`
-	DbPort              int    `mapstructure:"DB_PORT"`
-	DbHost              string `mapstructure:"DB_HOST"`
-	DbName              string `mapstructure:"DB_NAME"`
-	DbSslMode           string `mapstructure:"DB_SSL_MODE"`
-	CloudinaryCloudName string `mapstructure:"CLOUDINARY_CLOUD_NAME"`
-	CloudinaryApiKey    string `mapstructure:"CLOUDINARY_API_KEY"`
-	CloudinaryApiSecret string `mapstructure:"CLOUDINARY_API_SECRET"`
+	Port                        int    `mapstructure:"PORT"`
+	DbUsername                  string `mapstructure:"DB_USERNAME"`
+	DbPassword                  string `mapstructure:"DB_PASSWORD"`
+	DbPort                      int    `mapstructure:"DB_PORT"`
+	DbHost                      string `mapstructure:"DB_HOST"`
+	DbName                      string `mapstructure:"DB_NAME"`
+	DbSslMode                   string `mapstructure:"DB_SSL_MODE"`
+	CloudinaryCloudName         string `mapstructure:"CLOUDINARY_CLOUD_NAME"`
+	CloudinaryApiKey            string `mapstructure:"CLOUDINARY_API_KEY"`
+	CloudinaryApiSecret         string `mapstructure:"CLOUDINARY_API_SECRET"`
+	AccessTokenKey              string `mapstructure:"ACCESS_TOKEN_KEY"`
+	AccessTokenLifeTimeMinutes  int64  `mapstructure:"ACCESS_TOKEN_LIFETIME_MINUTES"`
+	RefreshTokenKey             string `mapstructure:"REFRESH_TOKEN_KEY"`
+	RefreshTokenLifeTimeMinutes int64  `mapstructure:"REFRESH_TOKEN_LIFETIME_MINUTES"`
 }
 
 func LoadAppConfig(path string) (AppConfig, error) {
