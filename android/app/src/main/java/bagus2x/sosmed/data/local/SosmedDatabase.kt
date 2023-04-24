@@ -18,7 +18,8 @@ import kotlinx.serialization.json.Json
         CommentEntity::class,
         ChatEntity::class,
         MessageEntity::class,
-        TrendingEntity::class
+        TrendingEntity::class,
+        NotificationEntity::class
     ]
 )
 @TypeConverters(Converters::class)
@@ -30,6 +31,7 @@ abstract class SosmedDatabase : RoomDatabase() {
     abstract val chatLocalDataSource: ChatLocalDataSource
     abstract val messageLocalDataSource: MessageLocalDataSource
     abstract val trendingLocalDataSource: TrendingLocalDataSource
+    abstract val notificationLocalDataSource: NotificationLocalDataSource
 }
 
 class Converters {

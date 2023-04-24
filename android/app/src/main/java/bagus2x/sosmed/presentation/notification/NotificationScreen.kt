@@ -1,93 +1,105 @@
 package bagus2x.sosmed.presentation.notification
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import bagus2x.sosmed.presentation.common.components.Image
-import bagus2x.sosmed.presentation.common.components.TextFormatter
-import bagus2x.sosmed.presentation.common.components.rememberTranslationState
-import bagus2x.sosmed.presentation.common.components.textFormatter
-import timber.log.Timber
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
+import bagus2x.sosmed.R
+import bagus2x.sosmed.domain.model.Notification
+import bagus2x.sosmed.presentation.common.LocalShowSnackbar
+import bagus2x.sosmed.presentation.common.components.Scaffold
+import bagus2x.sosmed.presentation.feed.FeedDetailScreen
+import bagus2x.sosmed.presentation.notification.components.Notification
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun NotificationScreen(
     navController: NavController,
     viewModel: NotificationViewModel = hiltViewModel()
 ) {
-    Column(modifier = Modifier.systemBarsPadding()) {
-        val text = textFormatter(
-            text = """
-           hello *my name* is @tubagus @saifulloh. #GGMU http://google.com social media facebook.com
-           _bagus_ hate ~you~
-           `fun main() { println("hello world") }`
-       """.trimIndent()
-        )
-        TextFormatter(
-            text = text,
-            onClick = {
-                detectClickText {
-                    Timber.i("HASIL offset $it")
-                }
-                detectClickUrl {
-                    Timber.i("HASIL url $it")
-                }
-                detectClickHashtag {
-                    Timber.i("HASIL hashtag $it")
-                }
-                detectClickMention {
-                    Timber.i("HASIL mention $it")
-                }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val notifications = viewModel.notifications.collectAsLazyPagingItems()
+    NotificationScreen(
+        stateProvider = { state },
+        notifications = notifications,
+        snackbarConsumed = viewModel::snackbarConsumed,
+        navigateToFeedDetail = { feedId ->
+            navController.navigate(FeedDetailScreen(feedId))
+        }
+    )
+}
+
+@Composable
+fun NotificationScreen(
+    stateProvider: () -> NotificationState,
+    notifications: LazyPagingItems<Notification>,
+    snackbarConsumed: () -> Unit,
+    navigateToFeedDetail: (Long) -> Unit
+) {
+    val showSnackbar = LocalShowSnackbar.current
+    LaunchedEffect(Unit) {
+        snapshotFlow { stateProvider() }.collectLatest { state ->
+            if (state.snackbar.isNotBlank()) {
+                showSnackbar(state.snackbar)
+                snackbarConsumed()
             }
-        )
-        Image(
-            model = null, contentDescription = null, modifier = Modifier
-                .size(200.dp)
-                .clip(CircleShape)
-        )
-        val listState = remember {
-            mutableStateListOf<@Composable () -> Unit>()
         }
-        val translationState = rememberTranslationState(
-            sourceText = "hello my name is tubagus",
-            sourceLang = "en"
-        )
-        Text(text = translationState.text.value)
-        Button(onClick = translationState::toggle) {
-            Text(text = translationState.buttonText)
-        }
-        Box(
-            modifier = Modifier.background(Color.Red)
+    }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 2.dp,
+                title = {
+                    Text(text = stringResource(R.string.text_notification))
+                }
+            )
+        },
+        modifier = Modifier.systemBarsPadding()
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(vertical = 8.dp)
         ) {
-            Button(
-                onClick = {
-                    listState.add {
-                        Text(text = "hello ")
-                    }
+            items(
+                items = notifications,
+                key = Notification::id
+            ) { notification ->
+                if (notification != null) {
+                    Notification(
+                        notification = notification,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            if (notification.type is Notification.Type.FeedLiked) {
+                                navigateToFeedDetail(notification.type.feedId)
+                            }
+                        }
+                    )
                 }
-            ) {
-                Text(text = "hello")
             }
-        }
-        LazyColumn {
-            items(listState) {
-                it()
+            item {
+                Spacer(modifier = Modifier.height(72.dp))
             }
         }
     }
 }
+

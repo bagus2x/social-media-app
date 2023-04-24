@@ -7,6 +7,7 @@ import (
 	"gopkg.in/guregu/null.v4"
 	"sosmed-go-backend/common"
 	"sosmed-go-backend/models"
+	notificationSvc "sosmed-go-backend/notification/service"
 	userRepo "sosmed-go-backend/user/repository"
 	"time"
 )
@@ -14,10 +15,15 @@ import (
 type UserService struct {
 	userRepository         userRepo.UserRepository
 	followedUserRepository userRepo.FollowedUserRepository
+	notificationService    notificationSvc.NotificationService
 }
 
-func NewUserService(userRepository userRepo.UserRepository, followedUserRepository userRepo.FollowedUserRepository) UserService {
-	return UserService{userRepository, followedUserRepository}
+func NewUserService(
+	userRepository userRepo.UserRepository,
+	followedUserRepository userRepo.FollowedUserRepository,
+	notificationService notificationSvc.NotificationService,
+) UserService {
+	return UserService{userRepository, followedUserRepository, notificationService}
 }
 
 func (s *UserService) GetUserById(ctx context.Context, userId int64) (models.UserResponse, error) {
@@ -285,6 +291,11 @@ func (s *UserService) Follow(ctx context.Context, followedId int64) error {
 			return err
 		}
 
+		err = s.notificationService.CreateNotificationWhenUserStartedFollowing(ctx, &profile, followedId)
+		if err != nil {
+			return err
+		}
+
 		return nil
 	})
 }
@@ -356,33 +367,12 @@ func (s *UserService) Update(ctx context.Context, req *models.UpdateUserReq) (mo
 		user.Password = req.Password.String
 	}
 
-	if req.Photo.Valid {
-		user.Photo = req.Photo
-	}
-
-	if req.Photo.Valid {
-		user.Photo = req.Photo
-	}
-
-	if req.Header.Valid {
-		user.Header = req.Header
-	}
-
-	if req.Bio.Valid {
-		user.Bio = req.Bio
-	}
-
-	if req.Location.Valid {
-		user.Location = req.Location
-	}
-
-	if req.Website.Valid {
-		user.Website = req.Website
-	}
-
-	if req.DateOfBirth.Valid {
-		user.DateOfBirth = req.DateOfBirth
-	}
+	user.Photo = req.Photo
+	user.Header = req.Header
+	user.Bio = req.Bio
+	user.Location = req.Location
+	user.Website = req.Website
+	user.DateOfBirth = req.DateOfBirth
 
 	err = s.userRepository.Update(ctx, &user)
 	if err != nil {

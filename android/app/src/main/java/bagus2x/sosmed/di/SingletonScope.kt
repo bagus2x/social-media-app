@@ -7,7 +7,9 @@ import bagus2x.sosmed.data.*
 import bagus2x.sosmed.data.common.HttpClient
 import bagus2x.sosmed.data.local.AuthLocalDataSource
 import bagus2x.sosmed.data.local.ChatLocalDataSource
+import bagus2x.sosmed.data.local.KeyLocalDataSource
 import bagus2x.sosmed.data.local.MessageLocalDataSource
+import bagus2x.sosmed.data.local.NotificationLocalDataSource
 import bagus2x.sosmed.data.local.SosmedDatabase
 import bagus2x.sosmed.data.local.entity.TrendingLocalDataSource
 import bagus2x.sosmed.data.remote.*
@@ -95,6 +97,12 @@ object SingletonScope {
         return Room
             .databaseBuilder(context, SosmedDatabase::class.java, "sosmed")
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideKeyLocalDataSource(sosmedDatabase: SosmedDatabase): KeyLocalDataSource {
+        return sosmedDatabase.keyLocalDataSource
     }
 
     @Provides
@@ -233,7 +241,39 @@ object SingletonScope {
         trendingRemoteDataSource: TrendingRemoteDataSource,
         sosmedDatabase: SosmedDatabase
     ): TrendingRepository {
-        return TrendingRepositoryImpl(trendingLocalDataSource, trendingRemoteDataSource, sosmedDatabase)
+        return TrendingRepositoryImpl(
+            trendingLocalDataSource,
+            trendingRemoteDataSource,
+            sosmedDatabase
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationLocalDataSource(sosmedDatabase: SosmedDatabase): NotificationLocalDataSource {
+        return sosmedDatabase.notificationLocalDataSource
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationRemoteDataSource(client: HttpClient): NotificationRemoteDataSource {
+        return NotificationRemoteDataSource(client)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationRepository(
+        keyLocalDataSource: KeyLocalDataSource,
+        notificationLocalDataSource: NotificationLocalDataSource,
+        notificationRemoteDataSource: NotificationRemoteDataSource,
+        sosmedDatabase: SosmedDatabase
+    ): NotificationRepository {
+        return NotificationRepositoryImpl(
+            keyLocalDataSource = keyLocalDataSource,
+            notificationLocalDataSource = notificationLocalDataSource,
+            notificationRemoteDataSource = notificationRemoteDataSource,
+            database = sosmedDatabase
+        )
     }
 }
 

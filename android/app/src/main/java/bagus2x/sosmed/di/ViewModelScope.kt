@@ -189,4 +189,10 @@ object ViewModelScope {
     fun provideSearchFeedsUseCase(feedRepository: FeedRepository): SearchFeedsUseCase {
         return SearchFeedsUseCase(feedRepository)
     }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetNotificationsUseCase(notificationRepository: NotificationRepository): GetNotificationUsecase {
+        return GetNotificationUsecase(notificationRepository)
+    }
 }
