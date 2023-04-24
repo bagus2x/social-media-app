@@ -3,12 +3,29 @@ package bagus2x.sosmed.presentation.user.edit
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,6 +37,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -121,7 +139,7 @@ fun EditProfileScreen(
                     }
                 },
                 title = {
-                    Text(text = "Edit profile")
+                    Text(text = stringResource(R.string.text_edit_profile))
                 },
                 actions = {
                     Button(
@@ -129,7 +147,7 @@ fun EditProfileScreen(
                         modifier = Modifier.padding(end = 12.dp),
                         enabled = state.isFulfilled && !state.loading
                     ) {
-                        Text(text = "Save")
+                        Text(text = stringResource(R.string.text_save))
                     }
                 }, backgroundColor = MaterialTheme.colors.background
             )
@@ -259,7 +277,7 @@ fun EditProfileScreen(
                     .padding(horizontal = 16.dp),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 label = {
-                    Text(text = "Website")
+                    Text(text = stringResource(R.string.text_website))
                 },
                 enabled = !state.loading,
                 contentPadding = PaddingValues(horizontal = 0.dp)
@@ -273,7 +291,7 @@ fun EditProfileScreen(
                 onResult = setDateOfBirth
             )
             TextField(
-                value = state.dateOfBirth?.toString() ?: "",
+                value = state.dateOfBirth?.let(Misc::formatDate) ?: "",
                 onValueChange = setName,
                 maxLines = 1,
                 modifier = Modifier
@@ -282,11 +300,19 @@ fun EditProfileScreen(
                     .noRippleClickable { datePickerDialogState.show() },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 label = {
-                    Text(text = "Date of birth")
+                    Text(text = stringResource(R.string.text_date_of_birth))
                 },
                 enabled = false,
                 contentPadding = PaddingValues(horizontal = 0.dp),
-                readOnly = true
+                readOnly = true,
+                trailingIcon = {
+                    IconButton(onClick = { setDateOfBirth(null) }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_delete_outlined),
+                            contentDescription = null
+                        )
+                    }
+                }
             )
         }
         if (state.loading) {

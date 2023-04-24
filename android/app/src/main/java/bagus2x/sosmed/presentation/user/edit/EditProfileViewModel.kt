@@ -7,7 +7,11 @@ import bagus2x.sosmed.domain.usecase.UpdateUserUseCase
 import bagus2x.sosmed.presentation.common.media.DeviceMedia
 import bagus2x.sosmed.presentation.common.uploader.FileUploader
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
@@ -79,7 +83,7 @@ class EditProfileViewModel @Inject constructor(
                             bio = user.bio ?: "",
                             location = user.location ?: "",
                             website = user.website ?: "",
-                            dateOfBirth = null
+                            dateOfBirth = user.dateOfBirth
                         )
                     }
                 }
@@ -97,7 +101,7 @@ class EditProfileViewModel @Inject constructor(
                     bio = state.value.bio,
                     location = state.value.location,
                     website = state.value.website,
-                    dateOfBirth = null
+                    dateOfBirth = state.value.dateOfBirth
                 )
                 _state.update { state -> state.copy(loading = false, updated = true) }
             } catch (e: Exception) {
