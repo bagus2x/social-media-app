@@ -78,10 +78,18 @@ abstract class Destination constructor(
             deepLinks = this@Destination.deepLinks,
         ) {
             LaunchedEffect(Unit) {
+                var prevState: AuthState = AuthState.Loading
                 snapshotFlow { authStateProvider() }.distinctUntilChanged().collectLatest { state ->
                     if (state is AuthState.Unauthenticated) {
-                        navHostController.navigate(SignInScreen())
+                        navHostController.navigate(SignInScreen()) {
+                            if (prevState is AuthState.Authenticated) {
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    inclusive = true
+                                }
+                            }
+                        }
                     }
+                    prevState = state
                 }
             }
             when (authStateProvider()) {
