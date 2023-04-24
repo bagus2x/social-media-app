@@ -9,16 +9,26 @@ import (
 	"sosmed-go-backend/common"
 	feedRepo "sosmed-go-backend/feed/repository"
 	"sosmed-go-backend/models"
+	notificationSvc "sosmed-go-backend/notification/service"
 	"time"
 )
 
 type CommentService struct {
-	commentRepository commentRepo.CommentRepository
-	feedRepository    feedRepo.FeedRepository
+	commentRepository   commentRepo.CommentRepository
+	feedRepository      feedRepo.FeedRepository
+	notificationService notificationSvc.NotificationService
 }
 
-func NewCommentService(commentRepository commentRepo.CommentRepository, feedRepository feedRepo.FeedRepository) CommentService {
-	return CommentService{commentRepository, feedRepository}
+func NewCommentService(
+	commentRepository commentRepo.CommentRepository,
+	feedRepository feedRepo.FeedRepository,
+	notificationService notificationSvc.NotificationService,
+) CommentService {
+	return CommentService{
+		commentRepository,
+		feedRepository,
+		notificationService,
+	}
 }
 
 func (s *CommentService) Create(ctx context.Context, req *models.CreateCommentReq) (models.CommentRes, error) {
@@ -51,10 +61,21 @@ func (s *CommentService) Create(ctx context.Context, req *models.CreateCommentRe
 			if err != nil {
 				return err
 			}
+
+			err = s.notificationService.CreateNotificationWhenCommentIsReplied(ctx, &profile, comment.Id)
+			if err != nil {
+				return err
+			}
+		} else {
+			err = s.notificationService.CreateNotificationWhenFeedIsCommented(ctx, &profile, comment.Id)
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil
 	})
+
 	if err != nil {
 		return models.CommentRes{}, err
 	}
