@@ -1,3 +1,6 @@
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
 # Serializer for classes with named companion objects are retrieved using `getDeclaredClasses`.
 # If you have any, replace classes with those containing named companion objects.
 -keepattributes InnerClasses # Needed for `getDeclaredClasses`.
