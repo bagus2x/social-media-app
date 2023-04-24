@@ -76,4 +76,13 @@
         <item>@string/text_users</item>
         <item>@string/text_feeds</item>
     </string-array>
+    <string name="text_feed_liked">%1$s *liked your feed*</string>
+    <string name="text_feed_commented">%1$s *commented at your feed*: %2$s</string>
+    <string name="text_comment_replied">%1$s *replied your comment*: %2$s</string>
+    <string name="text_user_following">%1$s *started following you*</string>
+    <string name="text_notification">Notification</string>
+    <string name="text_date_of_birth">Date of birth</string>
+    <string name="text_website">Website</string>
+    <string name="text_save">Save</string>
+    <string name="text_edit_profile">Edit profile</string>
 </resources>

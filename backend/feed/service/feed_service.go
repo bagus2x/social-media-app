@@ -9,6 +9,7 @@ import (
 	"sosmed-go-backend/common"
 	feedRepo "sosmed-go-backend/feed/repository"
 	"sosmed-go-backend/models"
+	notificationSvc "sosmed-go-backend/notification/service"
 	tagRepo "sosmed-go-backend/tag/repository"
 	userRepo "sosmed-go-backend/user/repository"
 	"time"
@@ -19,6 +20,7 @@ type FeedService struct {
 	followedUserRepository userRepo.FollowedUserRepository
 	favoriteFeedRepository feedRepo.FavoriteFeedRepository
 	tagRepository          tagRepo.TagRepository
+	notificationService    notificationSvc.NotificationService
 }
 
 func NewFeedService(
@@ -26,12 +28,14 @@ func NewFeedService(
 	followedUserRepository userRepo.FollowedUserRepository,
 	favoriteFeedRepository feedRepo.FavoriteFeedRepository,
 	tagRepository tagRepo.TagRepository,
+	notificationRepository notificationSvc.NotificationService,
 ) FeedService {
 	return FeedService{
 		feedRepository,
 		followedUserRepository,
 		favoriteFeedRepository,
 		tagRepository,
+		notificationRepository,
 	}
 }
 
@@ -318,6 +322,11 @@ func (f *FeedService) Favorite(ctx context.Context, feedId int64) error {
 		}
 
 		err = f.feedRepository.IncrementTotalFavorites(txCtx, feedId)
+		if err != nil {
+			return err
+		}
+
+		err = f.notificationService.CreateNotificationWhenFeedIsLiked(ctx, &profile, feedId)
 		if err != nil {
 			return err
 		}
