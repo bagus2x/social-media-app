@@ -44,16 +44,12 @@ import bagus2x.sosmed.presentation.home.components.Story
 import bagus2x.sosmed.presentation.story.StoryDetailScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 
 @Composable
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        Timber.i("HASIL HOME SCREEN")
-    }
     val state by viewModel.state.collectAsStateWithLifecycle()
     val stories by viewModel.stories.collectAsStateWithLifecycle()
     val feeds = viewModel.feeds.collectAsLazyPagingItems()

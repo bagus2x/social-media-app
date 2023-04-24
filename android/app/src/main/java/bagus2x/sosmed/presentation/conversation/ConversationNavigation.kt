@@ -14,6 +14,7 @@ import bagus2x.sosmed.presentation.conversation.messages.MessagesScreen
 import bagus2x.sosmed.presentation.conversation.newchat.NewChatScreen
 import bagus2x.sosmed.presentation.conversation.newchat.NewGroupChatScreen
 
+@OptIn(ExperimentalAnimationApi::class)
 object ChatScreen : Destination(
     authority = "chat",
     screen = { _, navHostController ->

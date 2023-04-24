@@ -67,6 +67,7 @@ object EditProfileScreen : Destination(
     }
 )
 
+@OptIn(ExperimentalAnimationApi::class)
 object ProfileSettingsScreen : Destination(
     authority = "profile-menu-sheet",
     screen = { _, navHostController ->

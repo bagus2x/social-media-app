@@ -14,6 +14,7 @@ import bagus2x.sosmed.presentation.feed.feeddetail.FeedDetailScreen
 import bagus2x.sosmed.presentation.feed.mediadetail.MediaDetailScreen
 import bagus2x.sosmed.presentation.feed.newfeed.NewFeedScreen
 
+@OptIn(ExperimentalAnimationApi::class)
 object NewFeedScreen : Destination(
     authority = "new_feed",
     screen = { _, navHostController ->
@@ -30,7 +31,7 @@ object NewFeedScreen : Destination(
     }
 )
 
-
+@OptIn(ExperimentalAnimationApi::class)
 object MediaDetailScreen : Destination(
     authority = "media_detail",
     arguments = listOf(
@@ -56,6 +57,7 @@ object MediaDetailScreen : Destination(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 object FeedDetailScreen : Destination(
     authority = "feed_detail",
     arguments = listOf(navArgument("feed_id") { type = NavType.LongType }),
@@ -78,6 +80,7 @@ object FeedDetailScreen : Destination(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 object CommentScreen : Destination(
     authority = "comment_screen",
     arguments = listOf(navArgument("parent_id") { type = NavType.LongType }),
